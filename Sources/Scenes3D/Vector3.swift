@@ -15,4 +15,22 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+public struct Vector3 {
+    public var x : Int
+    public var y : Int
+    public var z : Int
 
+    static public let sero = Vector3(x:0, y:0, z:0)
+
+    public init() {
+        self.x = 0
+        self.y = 0
+        self.z = 0
+    }
+
+    public init(x:Int, y:Int, z:Int) {
+        self.x = x
+        self.y = y
+        self.z = z
+    }
+}
