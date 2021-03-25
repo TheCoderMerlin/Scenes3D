@@ -20,7 +20,7 @@ public struct Vector3 {
     public var y : Int
     public var z : Int
 
-    static public let sero = Vector3(x:0, y:0, z:0)
+    static public let zero = Vector3(x:0, y:0, z:0)
 
     public init() {
         self.x = 0
