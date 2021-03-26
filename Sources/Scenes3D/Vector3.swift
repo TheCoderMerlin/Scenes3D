@@ -15,6 +15,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+import Foundation
+
 /// A `Vector3` represents a point in 3D space, and is typically used to define the position and size of a three-dimensional object.
 public struct Vector3 : Equatable, AdditiveArithmetic {
     /// The coordinate along the x-axis.

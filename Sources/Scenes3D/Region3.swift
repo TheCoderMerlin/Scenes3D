@@ -12,26 +12,29 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.                  
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-/// Stores position, orientation, and size of a 3d rectangular prism. (similar to rect)
+/// A `Region3` represents a rectangular prism in 3D space.
 public struct Region3 : Equatable {
-    /// The center of the region that defines its point in 3D space.
+    /// The center position of the region3 in 3D space.
+    /// This value is modifiable and will alter the position of the region3.
     public var position : Vector3
-    /// The value of the region's orientation along all rotational axis.
+    /// The orientation of the region3 along all rotational axis.
+    /// This value is modifiable and will alter the rotation of the region3.
     public var orientation : Quaternion
-    /// The value of a region's size along all spacial axis.
+    /// The size of the region3 along all spacial axis.
+    /// This value is modifiable and will alter the size of the region3.
     public var size : Vector3
 
-    /// Creates a new 'Region3' with default values.
+    /// Creates a new `Region3` with default values.
     public init() {
         self.position = Vector3()
-        self.orientation = Quaternion(w:0, x:0, y:0, z:0)
+        self.orientation = Quaternion.identity
         self.size = Vector3(x:1, y:1, z:1)
     }
 
-    /// Creates a new 'Region3' with specified values.
+    /// Creates a new `Region3` from the specified values.
     /// - Parameters:
     ///   - position : The region's position.
     ///   - orientation : The region's rotational orientation.
@@ -42,7 +45,7 @@ public struct Region3 : Equatable {
         self.size = size
     }
 
-    /// Equivalence operator for two 'Region3's.
+    /// Equivalence operator for two `Region3`s.
     static public func == (left:Region3, right:Region3) -> Bool {
         return left.position == right.position && left.orientation == right.orientation && left.size == right.size
     }
