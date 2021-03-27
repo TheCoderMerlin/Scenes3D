@@ -28,6 +28,8 @@ public struct Vector3 : Equatable, AdditiveArithmetic {
 
     /// The vector3 (x:0, y:0, z:0).
     static public let zero = Vector3(x:0, y:0, z:0)
+    /// The vector3 (x:1, y:1, z:1).
+    static public let one = Vector3(x:1, y:1, z:1)
 
     /// Creates a new `Vector3` with the properties (x:0, y:0, z:0)
     public init() {

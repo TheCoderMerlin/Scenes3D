@@ -16,9 +16,48 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 import Igis
-import Scenes
 
-public class Camera : Layer {
-    public init(fieldOfView:Double, size:Size, nearPlane:Double, farPlane:Double) {
+/// A `Camera` represents a viewport into 3D space.
+public class Camera {
+    internal private(set) var clipPath : ClipPath?
+    
+    /// The field of view of the camera in degrees.
+    public var fieldOfView : Double
+    /// Where on the screen the camera is rendered.
+    /// If set to nil, camera will assume canvasSize.
+    public var viewportRect : Rect? {
+        didSet {
+            clipPath = Camera.calculateClipPath(viewportRect:viewportRect)
+        }
+    }
+    
+    /// The distance of the near clipping plane from the Camera.
+    public var nearClipPlane : Int
+    /// The distance of the far clipping plane from the Camera.
+    public var farClipPlane : Int
+
+    /// Creates a new `Camera` from the specified values.
+    /// - Parameters:
+    ///   - fieldOfView: The camera's vertical vield of view.
+    ///   - viewportRect: Where the camera is rendered on the screen. Default is nil.
+    ///   - nearClipPlane: The distance to the near clipping plane from the camera.
+    ///   - farClipPlane: The distance to the far clipping plane from the camera.
+    public init(fieldOfView:Double, viewportRect:Rect? = nil, nearClipPlane:Int, farClipPlane:Int) {
+        self.fieldOfView = fieldOfView
+        self.viewportRect = viewportRect
+        self.nearClipPlane = nearClipPlane
+        self.farClipPlane = farClipPlane
+
+        clipPath = Camera.calculateClipPath(viewportRect:viewportRect)
+    }
+
+    private static func calculateClipPath(viewportRect:Rect?) -> ClipPath? {
+        guard let viewportRect = viewportRect else {
+            return nil
+        }
+
+        let viewportPath = Path(rect:viewportRect)
+        let clipPath = ClipPath(path:viewportPath)
+        return clipPath
     }
 }

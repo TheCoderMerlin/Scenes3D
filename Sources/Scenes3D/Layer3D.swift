@@ -15,12 +15,55 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+import Igis
 import Scenes
 
-/// A 'Layer3D' is a layer object with support for 3D objects.
-public class Layer3D : IdentifiableObject {
-
+/// A 'Layer3D' is a layer object with support for rendering `Entity3D` objects.
+public class Layer3D : Layer {
+    public private(set) var camera : Camera?
+    
     public override init(name:String?=nil) {
         super.init(name:name)
+    }
+
+    /// Inserts a new `Entity3D` into this layer to receive updates.
+    /// This function should only be invoked during init(), setup(), or calculate().
+    public func insert(entity3D:Entity3D) {
+    }
+
+    /// Removes an `Entity3D` from this layer.
+    /// This function should only be invoked during init(), setup(), or calculate().
+    public func remove(entity3D:Entity3D) {
+    }
+
+    /// Sets the current `Camera` to use for rendering this layer.
+    /// This function should only be invoked during init(), setup(), or calculate().
+    public func setCamera(camera:Camera?) {
+        self.camera = camera
+    }
+
+    public override func preRender(canvas:Canvas) {
+        guard let camera = camera else {
+            return
+        }
+
+        // Apply camera clipPath if specified
+        let restoreStateRequired = (camera.clipPath != nil)
+        if restoreStateRequired {
+            let state = State(mode:.save)
+            canvas.render(state)
+
+            if let clipPath = camera.clipPath {
+                canvas.render(clipPath)
+            }
+        }
+
+        // Render all 3D entities
+
+        // restore state if required
+        if restoreStateRequired {
+            let state = State(mode:.restore)
+            canvas.render(state)
+        }
     }
 }

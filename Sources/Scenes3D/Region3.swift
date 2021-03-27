@@ -2,7 +2,7 @@
 Scenes3D provides a Swift object library with support for 3D renderable entities.
 Scenes3D runs on top of Scenes and IGIS.
 Copyright (C) 2021 William Jackson, William Paroff, Camden Thomson,
-Tango Golf Digital, LLC
+                   Tango Golf Digital, LLC
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
@@ -27,19 +27,12 @@ public struct Region3 : Equatable {
     /// This value is modifiable and will alter the size of the region3.
     public var size : Vector3
 
-    /// Creates a new `Region3` with default values.
-    public init() {
-        self.position = Vector3()
-        self.orientation = Quaternion.identity
-        self.size = Vector3(x:1, y:1, z:1)
-    }
-
     /// Creates a new `Region3` from the specified values.
     /// - Parameters:
-    ///   - position : The region's position.
-    ///   - orientation : The region's rotational orientation.
-    ///   - size : The region's size.
-    public init(position:Vector3, orientation:Quaternion, size:Vector3) {
+    ///   - position : The region's position. Default value is Vector3.zero
+    ///   - orientation : The region's rotational orientation. Default value is Quaternion.identity
+    ///   - size : The region's size. Default value is Vector3.one
+    public init(position:Vector3 = Vector3.zero, orientation:Quaternion = Quaternion.identity, size:Vector3 = Vector3.one) {
         self.position = position
         self.orientation = orientation
         self.size = size
