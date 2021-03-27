@@ -66,6 +66,17 @@ public struct Vector3 : Equatable, AdditiveArithmetic {
         return xDistanceSquared + yDistanceSquared + zDistanceSquared
     }
 
+    /// Sets the x, y, and z components of an existing 'Vector3'.
+    /// - Parameters:
+    ///    - x: The new x-coordinate.
+    ///    - y: The new y-coordinate.
+    ///    - z: The new z-coordinate.
+    public func set(x:Int, y:Int, z:Int) {
+        self.x = x
+        self.y = y
+        self.z = z
+    }
+
     /// Calculates the Euclidean distance between this vector3 and another.
     /// - Parameters:
     ///   - target: The target point to which to calculate the distance

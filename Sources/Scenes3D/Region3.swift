@@ -38,6 +38,20 @@ public struct Region3 : Equatable {
         self.size = size
     }
 
+    /// Changes the 'Region3's position by a specified amount.
+    /// - Parameters:
+    ///    - by: The change value.
+    public func translate(by:Vector3) {
+        self.position = position + by
+    }
+
+    /// Changes the 'Region3's orientation by a specified amount.
+    /// - Parameters:
+    ///    - by: The change value.
+    public func rotate(by:Vector3) {
+        self.orientation = orientation + by
+    }
+
     /// Equivalence operator for two `Region3`s.
     static public func == (left:Region3, right:Region3) -> Bool {
         return left.position == right.position && left.orientation == right.orientation && left.size == right.size
