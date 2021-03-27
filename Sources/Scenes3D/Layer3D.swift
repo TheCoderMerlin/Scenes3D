@@ -17,6 +17,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import Scenes
 
+/// A 'Layer3D' is a layer object with support for 3D objects.
 public class Layer3D : IdentifiableObject {
-    
+
+    public override init(name:String?=nil) {
+        super.init(name:name)
+    }
 }
