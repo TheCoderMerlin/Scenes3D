@@ -15,6 +15,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+import Scenes
+
 /// An `Entity3D` object contains 3D objects that can be manipulated as a group.
-public class Entity3D {
+public class RenderableEntity3D : IdentifiableObject {
 }

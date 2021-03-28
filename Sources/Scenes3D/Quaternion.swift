@@ -78,7 +78,7 @@ public struct Quaternion : Equatable {
         return left.w == right.w && left.x == right.x && left.y == right.y && left.z == right.z
     }
 
-    /// Addition opperator for two 'Quaternion's.
+    /// Addition opperator for two `Quaternion`s.
     static public func + (left:Quaternion, right:Quaternion) -> Quaternion {
         return Quaternion(x:left.x + right.x, y:left.y + right.y, z:left.z + right.x, w:left.w + right.w)
     }

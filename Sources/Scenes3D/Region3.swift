@@ -20,17 +20,17 @@ public struct Region3 : Equatable {
     /// The center position of the region3 in 3D space.
     /// This value is modifiable and will alter the position of the region3.
     public var position : Vector3
+    
     /// The orientation of the region3 along all rotational axis.
     /// This value is modifiable and will alter the rotation of the region3.
     public var orientation : Quaternion
+    
     /// The size of the region3 along all spacial axis.
     /// This value is modifiable and will alter the size of the region3.
     public var size : Vector3
     
-    /// The parent of the 'Region3'.
-    public var parent : Region3?
-    /// List of child 'Region3's in order of reference priority.
-    private var childPriorityList : ZOrderedList<Region3>
+    /// List of child `Region3`s in order of reference priority.
+    private var children : [Region3]
 
     /// Creates a new `Region3` from the specified values.
     /// - Parameters:
@@ -41,48 +41,37 @@ public struct Region3 : Equatable {
         self.position = position
         self.orientation = orientation
         self.size = size
-        self.parent = nil
-        self.childPriorityList = ZOrderedList<Region3>()
+        self.children = []
     }
 
-    /// Changes the 'Region3's position by a specified amount.
+    /// Changes the `Region3`s position by a specified amount.
     /// - Parameters:
     ///    - by: The change value.
-    public func translate(by:Vector3) {
-        self.position = position + by
+    public mutating func translate(by change:Vector3) {
+        self.position += change
     }
 
-    /// Changes the 'Region3's orientation by a specified amount.
+    /// Changes the `Region3`s orientation by a specified amount.
     /// - Parameters:
     ///    - by: The change value.
-    public func rotate(by:Vector3) {
-        self.orientation = orientation + by
+    public mutating func rotate(by change:Quaternion) {
+        self.orientation = orientation + change
     }
 
-    /// Sets a target 'Region3' as a child of this 'Region3'.
+    /// Sets a target `Region3` as a child of this `Region3`.
     /// - Parameter:
-    ///    - child: The target 'Region3'.
-    ///    - at(zLocation): Priority of child in the update cycle.
-    public func addChild(child:Region3, at zLocation:ZOrder<Region3> = .back) {
-        childPriorityList.insert(object:child, at:zLocation)
+    ///    - child: The target `Region3`.
+    public mutating func addChild(child:Region3) {
+        children.append(child)
     }
     
-    /// Removes target 'Region3' from the list of children.
+    /// Removes target `Region3` from the list of children.
     /// - Parameter:
-    ///    - child: The target 'Region3'.
-    public func removeChild(child:Region3) {
-        childPriorityList.remove(object:child)
+    ///    - child: The target `Region3`.
+    public mutating func removeChild(child:Region3) {
+        children.removeAll {$0 == child}
     }
     
-    /// Sets a target 'Region3' as the parent of this 'Region3'.
-    /// - Parameter:
-    ///    - parent: The target 'Region3'.
-    ///    - at(zLocation): Priority in parents update cycle.
-    public func setParent(parent:Region3, at zLocation:ZOrder<Region3> = .back) {
-        self.parent = parent
-        parent.addChild(child:self, at:zLocation)
-    }
-
     /// Equivalence operator for two `Region3`s.
     static public func == (left:Region3, right:Region3) -> Bool {
         return left.position == right.position && left.orientation == right.orientation && left.size == right.size
