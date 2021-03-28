@@ -15,26 +15,50 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+import Foundation
 import Igis
 
 /// A `Camera` represents a viewport into 3D space.
 public class Camera {
     internal private(set) var clipPath : ClipPath?
+    internal private(set) var projectionMatrix : Matrix4
+    
+    private var needNewClipPath : Bool
+    private var needNewProjectionMatrix : Bool
     
     /// The field of view of the camera in degrees.
-    public var fieldOfView : Double
+    public var fieldOfView : Double {
+        didSet {
+            precondition(fieldOfView > 0, "Camera fieldOfView must be greater than 0.")
+            needNewProjectionMatrix = true
+        }
+    }
+    
     /// Where on the screen the camera is rendered.
     /// If set to nil, camera will assume canvasSize.
     public var viewportRect : Rect? {
         didSet {
-            clipPath = Camera.calculateClipPath(viewportRect:viewportRect)
+            needNewClipPath = true
         }
     }
     
     /// The distance of the near clipping plane from the Camera.
-    public var nearClipPlane : Int
+    public var nearClipPlane : Int {
+        didSet {
+            precondition(farClipPlane > nearClipPlane, "Camera nearClipPlane must be smaller than farClipPlane.")
+            precondition(nearClipPlane > 0, "Camera nearClipPlane must be greater than 0.")
+            needNewProjectionMatrix = true
+        }
+    }
+    
     /// The distance of the far clipping plane from the Camera.
-    public var farClipPlane : Int
+    public var farClipPlane : Int {
+        didSet {
+            precondition(farClipPlane > nearClipPlane, "Camera farClipPlane must be larger than nearClipPlane.")
+            precondition(farClipPlane > 0, "Camera farClipPlane must be greater than 0.")
+            needNewProjectionMatrix = true
+        }
+    }
 
     /// Creates a new `Camera` from the specified values.
     /// - Parameters:
@@ -43,21 +67,47 @@ public class Camera {
     ///   - nearClipPlane: The distance to the near clipping plane from the camera.
     ///   - farClipPlane: The distance to the far clipping plane from the camera.
     public init(fieldOfView:Double, viewportRect:Rect? = nil, nearClipPlane:Int, farClipPlane:Int) {
+        precondition(fieldOfView > 0, "Camera fieldOfView must be greater than 0.")
+        precondition(farClipPlane > nearClipPlane, "Camera nearClipPlane must be smaller than farClipPlane.")
+        precondition(nearClipPlane > 0, "Camera nearClipPlane must be greater than 0.")
+        precondition(farClipPlane > nearClipPlane, "Camera farClipPlane must be larger than nearClipPlane.")
+        precondition(farClipPlane > 0, "Camera farClipPlane must be greater than 0.")
+        
         self.fieldOfView = fieldOfView
         self.viewportRect = viewportRect
         self.nearClipPlane = nearClipPlane
         self.farClipPlane = farClipPlane
 
-        clipPath = Camera.calculateClipPath(viewportRect:viewportRect)
+        clipPath = nil
+        projectionMatrix = Matrix4.identity
+
+        needNewClipPath = true
+        needNewProjectionMatrix = true
     }
 
-    private static func calculateClipPath(viewportRect:Rect?) -> ClipPath? {
-        guard let viewportRect = viewportRect else {
-            return nil
+    internal func preCalculate() {
+        // calculate a new clip path if needed
+        if needNewClipPath {
+            if let viewportRect = viewportRect {
+                let viewportPath = Path(rect:viewportRect)
+                clipPath = ClipPath(path:viewportPath)
+            }
+
+            needNewClipPath = false
         }
 
-        let viewportPath = Path(rect:viewportRect)
-        let clipPath = ClipPath(path:viewportPath)
-        return clipPath
+        // calculates a new projection matrix if needed
+        if needNewProjectionMatrix {
+            // TODO: test algorithm (derived from https://github.com/mrdoob/three.js/blob/master/src/cameras/PerspectiveCamera.js)
+            let scale = 1 / tan(fieldOfView.radians * 0.5)
+            let a = -Double(farClipPlane) / Double(farClipPlane - nearClipPlane)
+            let b = a * Double(nearClipPlane)
+            projectionMatrix = Matrix4(values:[[scale, 0.0,   0.0,   0.0],
+                                               [0.0,   scale, 0.0,   0.0],
+                                               [0.0,   0.0,   a,     -1.0],
+                                               [0.0,   0.0,   b,     0.0]])
+            
+            needNewProjectionMatrix = false
+        }
     }
 }

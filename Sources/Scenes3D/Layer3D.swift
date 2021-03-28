@@ -20,29 +20,30 @@ import Scenes
 
 /// A 'Layer3D' is a layer object with support for rendering `Entity3D` objects.
 public class Layer3D : Layer {
+    private var entity3DList : [RenderableEntity3D]
+    
     public private(set) var camera : Camera?
     
     public override init(name:String?=nil) {
+        entity3DList = []
+        
         super.init(name:name)
     }
 
-    /// Inserts a new `Entity3D` into this layer to receive updates.
-    /// This function should only be invoked during init(), setup(), or calculate().
-    public func insert(entity3D:Entity3D) {
+    /// All `Layer3D` calculations occur in the `postCalculate()` method so changes
+    /// made during the calculate phase will be applied to all 3D objects.
+    public override final func postCalculate(canvas:Canvas) {
+        guard let camera = camera else {
+            return
+        }
+
+        // allow camera to calculate necessary properties
+        camera.preCalculate()
     }
 
-    /// Removes an `Entity3D` from this layer.
-    /// This function should only be invoked during init(), setup(), or calculate().
-    public func remove(entity3D:Entity3D) {
-    }
-
-    /// Sets the current `Camera` to use for rendering this layer.
-    /// This function should only be invoked during init(), setup(), or calculate().
-    public func setCamera(camera:Camera?) {
-        self.camera = camera
-    }
-
-    public override func preRender(canvas:Canvas) {
+    /// All `Layer3D` rendering occurs in the `preRender()` method so that all
+    /// 2D objects rendered to the layer will be applied on top of 3D objects.
+    public override final func preRender(canvas:Canvas) {
         guard let camera = camera else {
             return
         }
@@ -65,5 +66,25 @@ public class Layer3D : Layer {
             let state = State(mode:.restore)
             canvas.render(state)
         }
+    }
+
+    /// Inserts a new `Entity3D` into this layer to receive updates.
+    /// This function should only be invoked during init(), setup(), or calculate().
+    public func insert(entity3D:RenderableEntity3D) {
+        precondition(!entity3DList.contains(entity3D), "Unable to insert specified RenderableEntity3D '\(entity3D.name)' because it is already inserted.")
+        entity3DList.append(entity3D)
+    }
+
+    /// Removes an `Entity3D` from this layer.
+    /// This function should only be invoked during init(), setup(), or calculate().
+    public func remove(entity3D:RenderableEntity3D) {
+        precondition(!entity3DList.contains(entity3D), "Unable to remove specified RenderableEntity3D '\(entity3D.name)' because it isn't inserted.")
+        entity3DList.removeAll {$0 == entity3D}
+    }
+
+    /// Sets the current `Camera` to use for rendering this layer.
+    /// This function should only be invoked during init(), setup(), or calculate().
+    public func setCamera(camera:Camera?) {
+        self.camera = camera
     }
 }

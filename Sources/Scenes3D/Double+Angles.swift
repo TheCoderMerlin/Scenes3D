@@ -15,39 +15,14 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-import Igis
-import Scenes
-
-/// An `Entity3D` object contains 3D objects that can be manipulated as a group.
-public class RenderableEntity3D : IdentifiableObject {
-    public private(set) weak var owningLayer3D : Layer3D?
-
-    public override init(name:String?=nil) {
-        owningLayer3D = nil
-
-        super.init(name:name)
+extension Double {
+    /// Returns this `Double` value in radians (from assumed degrees).
+    public var radians : Double {
+        return self * Double.pi / 180
     }
 
-    internal func internalSetup(canvas:Canvas, layer3D:Layer3D) {
-        owningLayer3D = layer3D
-    }
-
-    public var layer3D : Layer3D {
-        guard let owningLayer3D = owningLayer3D else {
-            fatalError("owningLayer required")
-        }
-        return owningLayer3D
-    }
-
-    public var scene : Scene {
-        return layer3D.scene
-    }
-
-    public var director : Director {
-        return scene.director
-    }
-
-    public var dispatcher : Dispatcher {
-        return director.dispatcher
+    /// Returns this `Double` value in degrees (from assumed radians).
+    public var degrees : Double {
+        return self * 180 / Double.pi
     }
 }
