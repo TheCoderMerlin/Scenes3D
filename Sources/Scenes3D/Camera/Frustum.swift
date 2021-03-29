@@ -15,14 +15,15 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-extension Double {
-    /// Returns this `Double` value in radians (from assumed degrees).
-    public var radians : Double {
-        return self * Double.pi / 180
-    }
+internal struct Frustum {
+    private var planes : [Plane]
 
-    /// Returns this `Double` value in degrees (from assumed radians).
-    public var degrees : Double {
-        return self * 180 / Double.pi
+    internal init(planes:Plane...) {
+        precondition(planes.count == 6, "Frustum must have 6 planes")
+        self.planes = planes
+    }
+    
+    internal func contains(bounds:Bounds) -> Bool {
+        return true
     }
 }

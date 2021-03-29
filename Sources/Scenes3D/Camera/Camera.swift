@@ -62,11 +62,11 @@ public class Camera {
 
     /// Creates a new `Camera` from the specified values.
     /// - Parameters:
-    ///   - fieldOfView: The camera's vertical vield of view.
+    ///   - fieldOfView: The camera's horizontal vield of view (in degrees).
     ///   - viewportRect: Where the camera is rendered on the screen. Default is nil.
     ///   - nearClipPlane: The distance to the near clipping plane from the camera.
     ///   - farClipPlane: The distance to the far clipping plane from the camera.
-    public init(fieldOfView:Double, viewportRect:Rect? = nil, nearClipPlane:Int, farClipPlane:Int) {
+    public init(fieldOfView:Double = 75.0, viewportRect:Rect? = nil, nearClipPlane:Int = 1, farClipPlane:Int = 1000) {
         precondition(fieldOfView > 0, "Camera fieldOfView must be greater than 0.")
         precondition(farClipPlane > nearClipPlane, "Camera nearClipPlane must be smaller than farClipPlane.")
         precondition(nearClipPlane > 0, "Camera nearClipPlane must be greater than 0.")
@@ -97,9 +97,10 @@ public class Camera {
         }
 
         // calculates a new projection matrix if needed
+        // TODO: redo algorithm (this is most certainly incorrect)
         if needNewProjectionMatrix {
             // TODO: test algorithm (derived from https://github.com/mrdoob/three.js/blob/master/src/cameras/PerspectiveCamera.js)
-            let scale = 1 / tan(fieldOfView.radians * 0.5)
+            let scale = 1 / tan(fieldOfView.inRadians * 0.5)
             let a = -Double(farClipPlane) / Double(farClipPlane - nearClipPlane)
             let b = a * Double(nearClipPlane)
             projectionMatrix = Matrix4(values:[[scale, 0.0,   0.0,   0.0],

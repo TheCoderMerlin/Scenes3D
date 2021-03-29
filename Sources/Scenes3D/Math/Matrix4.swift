@@ -15,10 +15,12 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+import Foundation
+
 /// A `Matrix4` represents a 4x4 matrix of Doubles and provides supporting
 /// functionality to handle 3D transforms.
 public class Matrix4 : CustomStringConvertible {
-    private let values : [[Double]] // Must be a 4x4 matrix
+    private var values : [[Double]] // Must be a 4x4 matrix
 
     /// The identity 4x4 Matrix.
     public static let identity = Matrix4(values:[[1.0, 0.0, 0.0, 0.0],
@@ -71,5 +73,43 @@ public class Matrix4 : CustomStringConvertible {
         }
 
         return vector
+    }
+
+    public func setRotation(to target:EulerAngle) {
+        let a = cos(target.x)
+        let b = sin(target.x)
+        
+        let c = cos(target.y)
+        let d = sin(target.y)
+        
+        let e = cos(target.z)
+        let f = sin(target.z)
+
+        let ae = a * e
+        let af = a * f
+        
+        let be = b * e
+        let bf = b * f
+        
+        values[0][0] = c * e
+        values[1][0] = -c * f
+        values[2][0] = d
+
+        values[0][1] = af + be * d
+        values[1][1] = ae - bf * d
+        values[2][1] = -b * c
+
+        values[0][2] = bf - ae * d
+        values[1][2] = be + af * d
+        values[2][2] = a * c
+
+        values[0][3] = 0
+        values[1][3] = 0
+        values[2][3] = 0
+
+        values[3][0] = 0
+        values[3][1] = 0
+        values[3][2] = 0
+        values[3][3] = 1
     }
 }

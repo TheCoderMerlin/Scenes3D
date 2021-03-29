@@ -34,10 +34,7 @@ public struct Quaternion : Equatable {
 
     /// Creates a new `Quaternion` with its identity properties.
     public init() {
-        self.x = 0
-        self.y = 0
-        self.z = 0
-        self.w = 1
+        self = Self.identity
     }
 
     /// Creates a new `Quaternion` from the specified properties.
@@ -51,6 +48,24 @@ public struct Quaternion : Equatable {
         self.y = y
         self.z = z
         self.w = w
+    }
+
+    /// Creates a new `Quaternion` from the given `EulerAngle`.
+    /// - Parameters:
+    ///   - euler: The `EulerAngle`.
+    public init(_ euler:EulerAngle) {
+        let c1 = cos(euler.x / 2)
+        let c2 = cos(euler.y / 2)
+        let c3 = cos(euler.z / 2)
+        let s1 = sin(euler.x / 2)
+        let s2 = sin(euler.y / 2)
+        let s3 = sin(euler.z / 2)
+
+        // NOTE: euler angles are applied in xyz order.
+        x = (s1 * c2 * c3) + (c1 * s2 * s3)
+        y = (c1 * s2 * c3) - (s1 * c2 * s3)
+        z = (c1 * c2 * s3) + (s1 * s2 * c3)
+        w = (c1 * c2 * c3) - (s1 * s2 * s3)
     }
 
     /// Returns a new quaternion with a magnitude of 1.
