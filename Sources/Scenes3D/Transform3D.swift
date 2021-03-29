@@ -66,9 +66,9 @@ public class Transform3D : Equatable {
 
     /// Rotates an transform3d around another transform3d
     /// - Parameters:
-    ///    - around: The transform your rotating around.
+    ///    - point: The transform3d your rotating around.
     ///    - by: The value of the objects rotation.  
-    public func rotateAround(around:Transform3D, by change:Quaternion) {
+    public func rotateAround(point:Transform3D, by change:Quaternion) {
         
     }
 
