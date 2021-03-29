@@ -15,28 +15,28 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-/// A `Region3` represents a rectangular prism in 3D space.
-public struct Region3 : Equatable {
-    /// The center position of the region3 in 3D space.
-    /// This value is modifiable and will alter the position of the region3.
+/// A `Transform3D` stores and controls an objects spacial information.
+public struct Transform3D : Equatable {
+    /// The center position of the transform3d in 3D space.
+    /// This value is modifiable and will alter the position of the transform3d.
     public var position : Vector3
     
-    /// The orientation of the region3 along all rotational axis.
-    /// This value is modifiable and will alter the rotation of the region3.
+    /// The orientation of the transform3d along all rotational axis.
+    /// This value is modifiable and will alter the rotation of the transform3d.
     public var orientation : Quaternion
     
-    /// The size of the region3 along all spacial axis.
-    /// This value is modifiable and will alter the size of the region3.
+    /// The size of the transform3d along all spacial axis.
+    /// This value is modifiable and will alter the size of the transform3d.
     public var size : Vector3
     
-    /// List of child `Region3`s in order of reference priority.
-    private var children : [Region3]
+    /// List of child transform3d's in order of reference priority.
+    private var children : [Transform3D]
 
-    /// Creates a new `Region3` from the specified values.
+    /// Creates a new transform3d from the specified values.
     /// - Parameters:
-    ///   - position : The region's position. Default value is Vector3.zero
-    ///   - orientation : The region's rotational orientation. Default value is Quaternion.identity
-    ///   - size : The region's size. Default value is Vector3.one
+    ///   - position : The transform3d's position. Default value is Vector3.zero
+    ///   - orientation : The transform3d's rotational orientation. Default value is Quaternion.identity
+    ///   - size : The transform3d's size. Default value is Vector3.one
     public init(position:Vector3 = Vector3.zero, orientation:Quaternion = Quaternion.identity, size:Vector3 = Vector3.one) {
         self.position = position
         self.orientation = orientation
@@ -44,35 +44,35 @@ public struct Region3 : Equatable {
         self.children = []
     }
 
-    /// Changes the `Region3`s position by a specified amount.
+    /// Changes the transform3d's position by a specified amount.
     /// - Parameters:
     ///    - by: The change value.
     public mutating func translate(by change:Vector3) {
         self.position += change
     }
 
-    /// Changes the `Region3`s orientation by a specified amount.
+    /// Changes the transform3d's orientation by a specified amount.
     /// - Parameters:
     ///    - by: The change value.
     public mutating func rotate(by change:Quaternion) {
         self.orientation = orientation + change
     }
 
-    /// Sets a target `Region3` as a child of this `Region3`.
+    /// Sets a target transform3d as a child of this transform3d.
     /// - Parameter:
-    ///    - child: The target `Region3`.
-    public mutating func addChild(child:Region3) {
+    ///    - child: The target transform3d.
+    public mutating func addChild(child:Transform3D) {
         children.append(child)
     }
     
-    /// Removes target `Region3` from the list of children.
+    /// Removes target transform3d from the list of children.
     /// - Parameter:
-    ///    - child: The target `Region3`.
-    public mutating func removeChild(child:Region3) {
+    ///    - child: The target transform3d.
+    public mutating func removeChild(child:Transform3D) {
         children.removeAll {$0 == child}
     }
     
-    /// Equivalence operator for two `Region3`s.
+    /// Equivalence operator for two transform3d's.
     static public func == (left:Region3, right:Region3) -> Bool {
         return left.position == right.position && left.orientation == right.orientation && left.size == right.size
     }
