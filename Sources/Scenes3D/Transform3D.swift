@@ -49,6 +49,9 @@ public struct Transform3D : Equatable {
     ///    - by: The change value.
     public mutating func translate(by change:Vector3) {
         self.position += change
+        for child in children {
+            child.translate(by:change)
+        }
     }
 
     /// Changes the transform3d's orientation by a specified amount.
@@ -56,6 +59,17 @@ public struct Transform3D : Equatable {
     ///    - by: The change value.
     public mutating func rotate(by change:Quaternion) {
         self.orientation = orientation + change
+        for child in children {
+            child.rotateAround(around:self, by:change)
+        }
+    }
+
+    /// Rotates an transform3d around another transform3d
+    /// - Parameters:
+    ///    - around: The transform your rotating around.
+    ///    - by: The value of the objects rotation.  
+    public mutating func rotateAround(around:Transform3D, by change:Quaternion) {
+        
     }
 
     /// Sets a target transform3d as a child of this transform3d.
