@@ -73,7 +73,7 @@ public struct Transform3D : Equatable {
     }
     
     /// Equivalence operator for two transform3d's.
-    static public func == (left:Region3, right:Region3) -> Bool {
+    static public func == (left:Transform3D, right:Transform3D) -> Bool {
         return left.position == right.position && left.orientation == right.orientation && left.size == right.size
     }
 }
