@@ -32,6 +32,9 @@ public class RenderableEntity3D : IdentifiableObject {
         owningLayer3D = layer3D
     }
 
+    internal func render(canvas:Canvas) {
+    }
+
     public var layer3D : Layer3D {
         guard let owningLayer3D = owningLayer3D else {
             fatalError("owningLayer required")

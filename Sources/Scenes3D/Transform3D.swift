@@ -16,7 +16,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 /// A `Transform3D` stores and controls an objects spacial information.
-public struct Transform3D : Equatable {
+public class Transform3D : Equatable {
     /// The center position of the transform3d in 3D space.
     /// This value is modifiable and will alter the position of the transform3d.
     public var position : Vector3
@@ -47,7 +47,7 @@ public struct Transform3D : Equatable {
     /// Changes the transform3d's position by a specified amount.
     /// - Parameters:
     ///    - by: The change value.
-    public mutating func translate(by change:Vector3) {
+    public func translate(by change:Vector3) {
         self.position += change
         for child in children {
             child.translate(by:change)
@@ -57,7 +57,7 @@ public struct Transform3D : Equatable {
     /// Changes the transform3d's orientation by a specified amount.
     /// - Parameters:
     ///    - by: The change value.
-    public mutating func rotate(by change:Quaternion) {
+    public func rotate(by change:Quaternion) {
         self.orientation = orientation + change
         for child in children {
             child.rotateAround(around:self, by:change)
@@ -68,21 +68,21 @@ public struct Transform3D : Equatable {
     /// - Parameters:
     ///    - around: The transform your rotating around.
     ///    - by: The value of the objects rotation.  
-    public mutating func rotateAround(around:Transform3D, by change:Quaternion) {
+    public func rotateAround(around:Transform3D, by change:Quaternion) {
         
     }
 
     /// Sets a target transform3d as a child of this transform3d.
     /// - Parameter:
     ///    - child: The target transform3d.
-    public mutating func addChild(child:Transform3D) {
+    public func addChild(child:Transform3D) {
         children.append(child)
     }
     
     /// Removes target transform3d from the list of children.
     /// - Parameter:
     ///    - child: The target transform3d.
-    public mutating func removeChild(child:Transform3D) {
+    public func removeChild(child:Transform3D) {
         children.removeAll {$0 == child}
     }
     

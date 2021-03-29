@@ -18,7 +18,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 import Igis
 
 public class Object3D {
-    private var calculated2DVertices : [Point]
+    private var inCameraView : Bool
+    private var calculated2DVertices : [Point] // represent vertices transposed from local camera space to 2D screen space
     private var calculatedVertices : [Vector3] // represent vertices in local camera space (saved to improve performance)
 
     public var vertices : [Vector3] // represent verticies in global space
@@ -27,18 +28,22 @@ public class Object3D {
     public var triangles : [Triangle]
 
     public init() {
+        inCameraView = false
         calculated2DVertices = []
         calculatedVertices = []
         vertices = []
         triangles = []
     }
+
+    internal func calculate() {
+    }
     
-    internal func renderComponents() -> CanvasObject? {
-        guard !triangles.isEmpty else {
+    internal func renderComponents(fillMode:FillMode) -> CanvasObject? {
+        guard inCameraView && !triangles.isEmpty else {
             return nil
         }
 
-        let trianglePath = Path()
+        let trianglePath = Path(fillMode:fillMode)
         
         for triangle in triangles {
             trianglePath.moveTo(calculated2DVertices[triangle.point1])
