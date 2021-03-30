@@ -60,7 +60,7 @@ public class Transform3D : Equatable {
     public func rotate(by change:Quaternion) {
         self.orientation = orientation + change
         for child in children {
-            child.rotateAround(around:self, by:change)
+            child.rotateAround(point:self, by:change)
         }
     }
 

@@ -16,6 +16,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 import Foundation
+import Igis
 
 /// A `Vector3` represents a point in 3D space, and is typically used to define the position and size of a three-dimensional object.
 public struct Vector3 : Equatable, AdditiveArithmetic {
@@ -65,6 +66,7 @@ public struct Vector3 : Equatable, AdditiveArithmetic {
     ///   - point: The vector3 your rotating around.
     ///   - by: The value of the objects rotation.
     public mutating func rotateAround(point:Vector3, by change:Quaternion) {  
+        /*
         let yzMatrix = transform(rotateRadians:change.x)
         z = z * yzMatrix.value[0] + point.z - y * yzMatrix.value[2] + point.y
         y = z * yzMatrix.value[1] + point.z + y * yzMatrix.value[3] + point.y
@@ -76,6 +78,7 @@ public struct Vector3 : Equatable, AdditiveArithmetic {
         let xyMatrix = transform(rotateRadians:change.z)
         x = x * xyMatrix.value[0] + point.x - y * xyMatrix.value[2] + point.y
         y = x * xyMatrix.value[1] + point.x + y * xyMatrix.value[3] + point.y
+         */
     }
 
     /// Calculates the square of the Euclidean distance between this vector3 and another.
