@@ -55,19 +55,7 @@ public struct Vector3 : Equatable, AdditiveArithmetic {
     ///   - point: The vector3 your rotating around.
     ///   - by: The value of the objects rotation.
     public mutating func rotateAround(point:Vector3, by change:Quaternion) {  
-        /*
-        let yzMatrix = transform(rotateRadians:change.x)
-        z = z * yzMatrix.value[0] + point.z - y * yzMatrix.value[2] + point.y
-        y = z * yzMatrix.value[1] + point.z + y * yzMatrix.value[3] + point.y
         
-        let xzMatrix = transform(rotateRadians:change.y)
-        x = x * xzMatrix.value[0] + point.x - z * xzMatrix.value[2] + point.z
-        z = x * xzMatrix.value[1] + point.x + z * xzMatrix.value[3] + point.z
-
-        let xyMatrix = transform(rotateRadians:change.z)
-        x = x * xyMatrix.value[0] + point.x - y * xyMatrix.value[2] + point.y
-        y = x * xyMatrix.value[1] + point.x + y * xyMatrix.value[3] + point.y
-         */
     }
 
     /// Calculates the square of the Euclidean distance between this vector3 and another.
