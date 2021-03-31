@@ -86,6 +86,10 @@ public struct Quaternion : Equatable {
         w = normalizedQuaternion.w
     }
 
+    public func inversed() -> Quaternion {
+        return Quaternion(x:-x, y:-y, z:-z, w:w)
+    }
+
     /// Equivalence operator for two `Quaternion`s.
     static public func == (left:Quaternion, right:Quaternion) -> Bool {
         return left.w == right.w && left.x == right.x && left.y == right.y && left.z == right.z
@@ -95,6 +99,8 @@ public struct Quaternion : Equatable {
     static public func + (left:Quaternion, right:Quaternion) -> Quaternion {
         return Quaternion(x:left.x + right.x, y:left.y + right.y, z:left.z + right.x, w:left.w + right.w)
     }
+
+    
 
     internal static func fromEuler(_ euler:Vector3) -> Quaternion {
         let c1 = cos(euler.x / 2)
