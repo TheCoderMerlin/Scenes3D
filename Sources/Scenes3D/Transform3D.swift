@@ -23,7 +23,16 @@ public class Transform3D : Equatable {
     
     /// The orientation of the transform3d along all rotational axis.
     /// This value is modifiable and will alter the rotation of the transform3d.
-    public var orientation : Quaternion
+    public var quaternion : Quaternion
+
+    public var orientation : Vector3 {
+        get {
+            return quaternion.euler
+        }
+        set (orientation) {
+            quaternion.euler = orientation
+        }
+    }
     
     /// The size of the transform3d along all spacial axis.
     /// This value is modifiable and will alter the size of the transform3d.
@@ -37,9 +46,16 @@ public class Transform3D : Equatable {
     ///   - position : The transform3d's position. Default value is Vector3.zero
     ///   - orientation : The transform3d's rotational orientation. Default value is Quaternion.identity
     ///   - size : The transform3d's size. Default value is Vector3.one
-    public init(position:Vector3 = Vector3.zero, orientation:Quaternion = Quaternion.identity, size:Vector3 = Vector3.one) {
+    public init(position:Vector3 = Vector3.zero, quaternion:Quaternion = Quaternion.identity, size:Vector3 = Vector3.one) {
         self.position = position
-        self.orientation = orientation
+        self.quaternion = quaternion
+        self.size = size
+        self.children = []
+    }
+
+    public init(position:Vector3 = Vector3.zero, orientation:Vector3, size:Vector3 = Vector3.one) {
+        self.position = position
+        self.quaternion = Quaternion.fromEuler(orientation)
         self.size = size
         self.children = []
     }
@@ -58,7 +74,7 @@ public class Transform3D : Equatable {
     /// - Parameters:
     ///    - by: The change value.
     public func rotate(by change:Quaternion) {
-        self.orientation = orientation + change
+        self.quaternion = quaternion + change
         for child in children {
             child.rotateAround(point:self, by:change)
         }

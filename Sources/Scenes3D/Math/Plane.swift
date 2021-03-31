@@ -15,5 +15,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+/// A `Plane` represents a 2-dimensional surface that extends infinitely in
+/// 3D space.  It is represented in Hessian normal form.
 public struct Plane {
+    
 }

@@ -10,6 +10,9 @@ let package = Package(
         .library(
             name: "Scenes3D",
             targets: ["Scenes3D"]),
+        .library(
+          name: "Scenes3DSample",
+          targets: ["Scenes3DSample"]),
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
@@ -21,5 +24,8 @@ let package = Package(
         .target(
             name: "Scenes3D",
             dependencies: []),
+        .target(
+          name: "Scenes3DSample",
+          dependencies: []),
     ]
 )

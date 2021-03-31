@@ -19,7 +19,7 @@ import Igis
 import Scenes
 
 /// A 'Layer3D' is a layer object with support for rendering `Entity3D` objects.
-public class Layer3D : Layer {
+open class Layer3D : Layer {
     private var entity3DList : [RenderableEntity3D]
     
     public private(set) var camera : Camera?

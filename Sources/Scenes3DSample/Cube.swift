@@ -24,13 +24,18 @@ class Cube {
     }
 
     func sortByDistance(_ sortingSquares:inout [Square], camera:Camera) {
-        var workingArray:[Double] = []
-
+        var workingDictionary : [Double:Square] = [:]
+        
         for square in sortingSquares {
-            workingArray.append(square.center.distanceFrom(point:Point3d(x:camera.x, y:camera.y, z:camera.z)))
+            let distance = square.center.distanceFrom(point:Point3d(x:camera.x, y:camera.y, z:camera.z))
+            workingDictionary[distance] = square
         }
 
-        sortingSquares = mergeSort(sortingSquares, by:workingArray) as! [Square]
+        sortingSquares = []
+        let sortedKeys = Array(workingDictionary.keys).sorted(by:<)
+        for key in sortedKeys {
+            sortingSquares.append(workingDictionary[key]!)
+        }
     }
 
     func renderCube(camera:Camera, canvas:Canvas, color:Color, solid:Bool=true) {

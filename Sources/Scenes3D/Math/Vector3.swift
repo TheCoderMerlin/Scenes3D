@@ -21,11 +21,11 @@ import Igis
 /// A `Vector3` represents a point in 3D space, and is typically used to define the position and size of a three-dimensional object.
 public struct Vector3 : Equatable, AdditiveArithmetic {
     /// The coordinate along the x-axis.
-    public var x : Int
+    public var x : Double
     /// The coordinate along the y-axis.
-    public var y : Int
+    public var y : Double
     /// The coordinate along the z-axis.
-    public var z : Int
+    public var z : Double
 
     /// The vector3 (x:0, y:0, z:0).
     static public let zero = Vector3(x:0, y:0, z:0)
@@ -44,18 +44,7 @@ public struct Vector3 : Equatable, AdditiveArithmetic {
     ///   - x: The x-coordinate
     ///   - y: The y-coordinate
     ///   - z: The z-coordinate
-    public init(x:Int, y:Int, z:Int) {
-        self.x = x
-        self.y = y
-        self.z = z
-    }
-
-    /// Sets the x, y, and z components of an existing `Vector3`.
-    /// - Parameters:
-    ///    - x: The new x-coordinate.
-    ///    - y: The new y-coordinate.
-    ///    - z: The new z-coordinate.
-    public mutating func set(x:Int, y:Int, z:Int) {
+    public init(x:Double, y:Double, z:Double) {
         self.x = x
         self.y = y
         self.z = z
@@ -85,7 +74,7 @@ public struct Vector3 : Equatable, AdditiveArithmetic {
     /// - Parameters:
     ///   - target: The target vector3 to which to calculate the distance
     /// - Returns: The square of the distance to a target vector3
-    public func distanceSquared(to target:Vector3) -> Int {
+    public func distanceSquared(to target:Vector3) -> Double {
         let xDistance = target.x - x
         let xDistanceSquared = xDistance * xDistance
 
@@ -124,5 +113,9 @@ public struct Vector3 : Equatable, AdditiveArithmetic {
     /// Subtraction operator for two `Vector3`s.
     static public func - (left:Vector3, right:Vector3) -> Vector3 {
         return left + -right
+    }
+
+    internal static func fromQuaternion(_ quaternion:Quaternion) -> Vector3 {
+        return Vector3.zero
     }
 }
