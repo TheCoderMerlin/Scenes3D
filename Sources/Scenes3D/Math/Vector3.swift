@@ -114,6 +114,10 @@ public struct Vector3 : Equatable, AdditiveArithmetic {
         return sqrt(Double(distanceSquared(to:target)))
     }
 
+    public func local(to origin:Vector3) -> Vector3 {
+        return self - origin
+    }
+
     /// Equivalence operator for two `Vector3`s.
     static public func == (left:Vector3, right:Vector3) -> Bool {
         return left.x == right.x && left.y == right.y && left.z == right.z

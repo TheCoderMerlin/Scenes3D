@@ -38,7 +38,12 @@ open class Layer3D : Layer {
         }
 
         // allow camera to calculate necessary properties
-        camera.preCalculate()
+        camera.preCalculate(canvasSize:canvas.canvasSize!)
+
+        // calculate all renderable entities (3d)
+        for entity3D in entity3DList {
+            entity3D.calculate(camera:camera)
+        }
     }
 
     /// All `Layer3D` rendering occurs in the `preRender()` method so that all
@@ -60,6 +65,9 @@ open class Layer3D : Layer {
         }
 
         // Render all 3D entities
+        for entity3D in entity3DList {
+            entity3D.render(canvas:canvas)
+        }
 
         // restore state if required
         if restoreStateRequired {

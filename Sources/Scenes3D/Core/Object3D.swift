@@ -19,9 +19,9 @@ import Igis
 
 // This is a crude mock-up (most properties are likely to change)
 public class Object3D {
-    private var inCameraView : Bool
-    private var calculated2DVertices : [Point] // represent vertices transposed from local camera space to 2D screen space
-    private var calculatedVertices : [Vector3] // represent vertices in local camera space (saved to improve performance)
+    internal var inCameraView : Bool
+    internal var calculated2DVertices : [Point] // represent vertices transposed from local camera space to 2D screen space
+    internal var calculatedVertices : [Vector3] // represent vertices in local camera space (saved to improve performance)
 
     public var vertices : [Vector3] // represent verticies in global space
 
@@ -36,23 +36,26 @@ public class Object3D {
         triangles = []
     }
 
-    internal func calculate() {
+    internal func calculate(camera:Camera) {
     }
     
-    internal func renderComponents(fillMode:FillMode) -> CanvasObject? {
+    internal func renderComponents(fillMode:FillMode) -> [CanvasObject] {
         guard inCameraView && !triangles.isEmpty else {
-            return nil
+            return []
         }
 
-        let trianglePath = Path(fillMode:fillMode)
+        var trianglePaths = [CanvasObject]()
         
         for triangle in triangles {
+            let trianglePath = Path(fillMode:fillMode)
             trianglePath.moveTo(calculated2DVertices[triangle.point1])
             trianglePath.lineTo(calculated2DVertices[triangle.point2])
             trianglePath.lineTo(calculated2DVertices[triangle.point3])
             trianglePath.close()
-        }
 
-        return trianglePath
+            trianglePaths.append(trianglePath)
+        }
+        
+        return trianglePaths
     }
 }

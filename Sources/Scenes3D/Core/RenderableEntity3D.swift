@@ -21,9 +21,11 @@ import Scenes
 /// An `Entity3D` object contains 3D objects that can be manipulated as a group.
 public class RenderableEntity3D : IdentifiableObject {
     public private(set) weak var owningLayer3D : Layer3D?
+    private var objects : [Object3D]
 
     public override init(name:String?=nil) {
         owningLayer3D = nil
+        objects = []
 
         super.init(name:name)
     }
@@ -32,7 +34,26 @@ public class RenderableEntity3D : IdentifiableObject {
         owningLayer3D = layer3D
     }
 
+    public func insert(object3D:Object3D) {
+        objects.append(object3D)
+    }
+
+    internal func calculate(camera:Camera) {
+        for object in objects {
+            object.calculate(camera:camera)
+        }
+    }
+
     internal func render(canvas:Canvas) {
+        var renderComponents = [CanvasObject]()
+        for object in objects {
+            let renderComponent = object.renderComponents(fillMode:.fillAndStroke)
+            for component in renderComponent {
+                renderComponents.append(component)
+            }
+        }
+        
+        canvas.render(renderComponents)
     }
 
     public var layer3D : Layer3D {

@@ -25,6 +25,7 @@ public class Camera {
     
     private var needNewClipPath : Bool
     private var needNewProjectionMatrix : Bool
+    private var canvasSize : Size
     
     /// The field of view of the camera in degrees.
     public var fieldOfView : Double {
@@ -36,6 +37,9 @@ public class Camera {
     
     /// Where on the screen the camera is rendered.
     /// If set to nil, camera will assume canvasSize.
+    internal var _viewportRect : Rect {
+        return viewportRect ?? Rect(topLeft:Point.zero, size:canvasSize)
+    }
     public var viewportRect : Rect? {
         didSet {
             needNewClipPath = true
@@ -80,12 +84,15 @@ public class Camera {
 
         clipPath = nil
         projectionMatrix = Matrix4.identity
+        canvasSize = Size.zero
 
         needNewClipPath = true
         needNewProjectionMatrix = true
     }
 
-    internal func preCalculate() {
+    internal func preCalculate(canvasSize:Size) {
+        self.canvasSize = canvasSize
+        
         // calculate a new clip path if needed
         if needNewClipPath {
             if let viewportRect = viewportRect {
