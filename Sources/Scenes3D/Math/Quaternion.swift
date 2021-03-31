@@ -31,10 +31,10 @@ public struct Quaternion : Equatable {
 
     public var euler : Vector3 {
         get {
-            return Vector3.fromQuaternion(self)
+            return Vector3(self)
         }
-        set (euler) {
-            self = Quaternion.fromEuler(euler)
+        set (vector3) {
+            self = Quaternion(vector3)
         }
     }
 
@@ -63,7 +63,18 @@ public struct Quaternion : Equatable {
     /// - Parameters:
     ///   - euler: The `Vector3` representing euclidean rotation.
     public init(_ euler:Vector3) {
-        self = Quaternion.fromEuler(euler)
+        let c1 = cos(euler.x / 2)
+        let c2 = cos(euler.y / 2)
+        let c3 = cos(euler.z / 2)
+        let s1 = sin(euler.x / 2)
+        let s2 = sin(euler.y / 2)
+        let s3 = sin(euler.z / 2)
+        
+        // NOTE: euler angles are applied in xyz order.
+        x = (s1 * c2 * c3) + (c1 * s2 * s3)
+        y = (c1 * s2 * c3) - (s1 * c2 * s3)
+        z = (c1 * c2 * s3) + (s1 * s2 * c3)
+        w = (c1 * c2 * c3) - (s1 * s2 * s3)
     }
 
     /// Returns a new quaternion with a magnitude of 1.
@@ -94,21 +105,5 @@ public struct Quaternion : Equatable {
     /// Addition opperator for two `Quaternion`s.
     static public func + (left:Quaternion, right:Quaternion) -> Quaternion {
         return Quaternion(x:left.x + right.x, y:left.y + right.y, z:left.z + right.x, w:left.w + right.w)
-    }
-
-    internal static func fromEuler(_ euler:Vector3) -> Quaternion {
-        let c1 = cos(euler.x / 2)
-        let c2 = cos(euler.y / 2)
-        let c3 = cos(euler.z / 2)
-        let s1 = sin(euler.x / 2)
-        let s2 = sin(euler.y / 2)
-        let s3 = sin(euler.z / 2)
-        
-        // NOTE: euler angles are applied in xyz order.
-        let x = (s1 * c2 * c3) + (c1 * s2 * s3)
-        let y = (c1 * s2 * c3) - (s1 * c2 * s3)
-        let z = (c1 * c2 * s3) + (s1 * s2 * c3)
-        let w = (c1 * c2 * c3) - (s1 * s2 * s3)
-        return Quaternion(x:x, y:y, z:z, w:w)
     }
 }

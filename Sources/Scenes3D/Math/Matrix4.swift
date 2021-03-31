@@ -22,6 +22,13 @@ import Foundation
 public class Matrix4 : CustomStringConvertible {
     private var values : [[Double]] // Must be a 4x4 matrix
 
+    public var position : Vector3 {
+        let x = values[0][3]
+        let y = values[1][3]
+        let z = values[2][3]
+        return Vector3(x:x, y:y, z:z)
+    }
+
     /// The identity 4x4 Matrix.
     public static let identity = Matrix4(values:[[1.0, 0.0, 0.0, 0.0],
                                                  [0.0, 1.0, 0.0, 0.0],

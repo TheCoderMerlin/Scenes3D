@@ -32,7 +32,7 @@ public struct Vector3 : Equatable, AdditiveArithmetic {
     /// The vector3 (x:1, y:1, z:1).
     static public let one = Vector3(x:1, y:1, z:1)
 
-    /// Creates a new `Vector3` with the properties (x:0, y:0, z:0)
+    /// Creates a new `Vector3` with the properties (x:0, y:0, z:0).
     public init() {
         self.x = 0
         self.y = 0
@@ -48,6 +48,13 @@ public struct Vector3 : Equatable, AdditiveArithmetic {
         self.x = x
         self.y = y
         self.z = z
+    }
+
+    /// Creates a new `Vector3` from the specified quaternion.
+    /// - Parameters:
+    ///   - quaternion: The `Quaternion` to use.
+    public init(_ quaternion:Quaternion) {
+        self = Vector3.zero
     }
 
     /// Rotates a vector3 around another vector3.
@@ -101,9 +108,5 @@ public struct Vector3 : Equatable, AdditiveArithmetic {
     /// Subtraction operator for two `Vector3`s.
     static public func - (left:Vector3, right:Vector3) -> Vector3 {
         return left + -right
-    }
-
-    internal static func fromQuaternion(_ quaternion:Quaternion) -> Vector3 {
-        return Vector3.zero
     }
 }

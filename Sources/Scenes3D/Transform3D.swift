@@ -55,7 +55,7 @@ public class Transform3D : Equatable {
 
     public init(position:Vector3 = Vector3.zero, orientation:Vector3, size:Vector3 = Vector3.one) {
         self.position = position
-        self.quaternion = Quaternion.fromEuler(orientation)
+        self.quaternion = Quaternion(orientation)
         self.size = size
         self.children = []
     }
