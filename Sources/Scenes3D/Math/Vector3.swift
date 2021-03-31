@@ -62,7 +62,27 @@ public struct Vector3 : Equatable, AdditiveArithmetic {
     ///   - point: The vector3 your rotating around.
     ///   - by: The value of the objects rotation.
     public mutating func rotateAround(point:Vector3, by change:Quaternion) {  
-        // let translatedVector3 = change * (self - point) * change.inversed() + point
+        let a = change.w
+        let b = change.x
+        let c = change.y
+        let d = change.z
+
+        let x = point.x
+        let y = point.y
+        let z = point.z
+        
+        let m = self.x - x
+        let n = self.y - y
+        let o = self.z - z
+        
+        let q = a*a + b*b + c*c + d*d
+        let xQ = a*a + b*b - c*c - d*d
+        let yQ = a*a - b*b + c*c - d*d
+        let zQ = a*a - b*b - c*c + d*d
+        
+        self.x = x+1/q*(xQ*m+2*(b*c-a*d)*n+2*(a*c+b*d)*o)
+        self.y = y+1/q*(2*(a*d+b*c)*m+yQ*n+2*(c*d-a*b)*o)
+        self.z = z+1/q*(2*(b*d-a*c)*m+2*(a*b+c*d)*n+zQ*o)
     }
     
     public mutating func rotateAround(point:Vector3, by change:Vector3) {
