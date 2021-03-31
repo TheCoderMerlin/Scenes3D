@@ -17,12 +17,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 extension Double {
     /// Returns this `Double` value in radians (from assumed degrees).
-    public var inRadians : Double {
+    public var asRadians : Double {
         return self * Double.pi / 180
     }
 
     /// Returns this `Double` value in degrees (from assumed radians).
-    public var inDegrees : Double {
+    public var asDegrees : Double {
         return self * 180 / Double.pi
     }
 }

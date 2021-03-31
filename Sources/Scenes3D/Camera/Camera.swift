@@ -107,7 +107,7 @@ public class Camera {
         // TODO: redo algorithm (this is most certainly incorrect)
         if needNewProjectionMatrix {
             // TODO: test algorithm (derived from https://github.com/mrdoob/three.js/blob/master/src/cameras/PerspectiveCamera.js)
-            let scale = 1 / tan(fieldOfView.inRadians * 0.5)
+            let scale = 1 / tan(fieldOfView.asRadians * 0.5)
             let a = -Double(farClipPlane) / Double(farClipPlane - nearClipPlane)
             let b = a * Double(nearClipPlane)
             projectionMatrix = Matrix4(values:[[scale, 0.0,   0.0,   0.0],

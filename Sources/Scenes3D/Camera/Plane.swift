@@ -17,6 +17,16 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 /// A `Plane` represents a 2-dimensional surface that extends infinitely in
 /// 3D space.  It is represented in Hessian normal form.
-public struct Plane {
-    
+internal struct Plane {
+    var normal : Vector3
+    var constant : Double
+
+    init(normal:Vector3, constant:Double) {
+        self.normal = normal
+        self.constant = constant
+    }
+
+    func distanceToPoint(_ point:Vector3) -> Double {
+        return normal.dot(with:point) + constant
+    }
 }

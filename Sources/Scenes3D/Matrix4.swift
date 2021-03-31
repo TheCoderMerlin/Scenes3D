@@ -22,6 +22,7 @@ import Foundation
 public class Matrix4 : CustomStringConvertible {
     private var values : [[Double]] // Must be a 4x4 matrix
 
+    /// The position attribute of this matrix.
     public var position : Vector3 {
         let x = values[0][3]
         let y = values[1][3]

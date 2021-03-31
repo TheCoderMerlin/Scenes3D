@@ -118,6 +118,11 @@ public struct Vector3 : Equatable, AdditiveArithmetic {
         return self - origin
     }
 
+    public func dot(with target:Vector3) -> Double {
+        let multiplied = self * target
+        return multiplied.x + multiplied.y + multiplied.z
+    }
+
     /// Equivalence operator for two `Vector3`s.
     static public func == (left:Vector3, right:Vector3) -> Bool {
         return left.x == right.x && left.y == right.y && left.z == right.z
@@ -136,5 +141,9 @@ public struct Vector3 : Equatable, AdditiveArithmetic {
     /// Subtraction operator for two `Vector3`s.
     static public func - (left:Vector3, right:Vector3) -> Vector3 {
         return left + -right
+    }
+
+    static public func * (left:Vector3, right:Vector3) -> Vector3 {
+        return Vector3(x:left.x * right.x, y:left.y * right.y, z:left.z * right.z)
     }
 }

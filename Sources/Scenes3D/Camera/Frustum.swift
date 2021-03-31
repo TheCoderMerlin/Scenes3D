@@ -22,8 +22,29 @@ internal struct Frustum {
         precondition(planes.count == 6, "Frustum must have 6 planes")
         self.planes = planes
     }
+
+    internal func contains(target:Vector3) -> Bool {
+        for plane in planes {
+            if plane.distanceToPoint(target) < 0 {
+                return false
+            }
+        }
+
+        return true
+    }
     
     internal func contains(bounds:Bounds) -> Bool {
+        for plane in planes {
+            let x = (plane.normal.x > 0) ? bounds.max.x : bounds.min.x
+            let y = (plane.normal.y > 0) ? bounds.max.y : bounds.min.y
+            let z = (plane.normal.z > 0) ? bounds.max.z : bounds.min.z
+            let target = Vector3(x:x, y:y, z:z)
+            
+            if plane.distanceToPoint(target) < 0 {
+                return false
+            }
+        }
+        
         return true
     }
 }
