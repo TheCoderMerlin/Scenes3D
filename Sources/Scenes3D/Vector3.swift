@@ -122,28 +122,70 @@ public struct Vector3 : Equatable, AdditiveArithmetic {
         let multiplied = self * target
         return multiplied.x + multiplied.y + multiplied.z
     }
+    
+    public static func min(_ vector1:Vector3, _ vectors:Vector3...) -> Vector3 {
+        var minVector = vector1
+
+        for vector in vectors {
+            if vector.x > minVector.x {
+                minVector.x = vector.x
+            }
+            if vector.y > minVector.y {
+                minVector.y = vector.y
+            }
+            if vector.z > minVector.z {
+                minVector.z = vector.z
+            }
+        }
+
+        return minVector
+    }
+
+    public static func max(_ vector1:Vector3, _ vectors:Vector3...) -> Vector3 {
+        var maxVector = vector1
+
+        for vector in vectors {
+            if vector.x < maxVector.x {
+                maxVector.x = vector.x
+            }
+            if vector.y < maxVector.y {
+                maxVector.y = vector.y
+            }
+            if vector.z < maxVector.z {
+                maxVector.z = vector.z
+            }
+        }
+
+        return maxVector
+    }
 
     /// Equivalence operator for two `Vector3`s.
-    static public func == (left:Vector3, right:Vector3) -> Bool {
+    public static func == (left:Vector3, right:Vector3) -> Bool {
         return left.x == right.x && left.y == right.y && left.z == right.z
     }
 
     /// Addition operator for two `Vector3`s.
-    static public func + (left:Vector3, right:Vector3) -> Vector3 {
+    public static func + (left:Vector3, right:Vector3) -> Vector3 {
         return Vector3(x:left.x + right.x, y:left.y + right.y, z:left.z + right.z)
     }
 
     /// Negation operator for a `Vector3`.
-    static public prefix func - (vector3:Vector3) -> Vector3 {
+    public static prefix func - (vector3:Vector3) -> Vector3 {
         return Vector3(x:-vector3.x, y:-vector3.y, z:-vector3.z)
     }
 
     /// Subtraction operator for two `Vector3`s.
-    static public func - (left:Vector3, right:Vector3) -> Vector3 {
+    public static func - (left:Vector3, right:Vector3) -> Vector3 {
         return left + -right
     }
 
-    static public func * (left:Vector3, right:Vector3) -> Vector3 {
+    /// Multiplication operator for two `Vector3`s.
+    public static func * (left:Vector3, right:Vector3) -> Vector3 {
         return Vector3(x:left.x * right.x, y:left.y * right.y, z:left.z * right.z)
+    }
+
+    /// Division operator for two `Vector3`s.
+    public static func / (left:Vector3, right:Vector3) -> Vector3 {
+        return Vector3(x:left.x / right.x, y:left.y / right.y, z:left.z / right.z)
     }
 }

@@ -49,6 +49,33 @@ public struct Bounds : Equatable {
         self.size = size
     }
 
+    /// Creates a new `Bounds` object between the specified points.
+    /// - Parameters:
+    ///   - from: The starting point.
+    ///   - to: The ending point.
+    public init(from:Vector3, to:Vector3) {
+        self.center = to - from / Vector3(x:2, y:2, z:2)
+        self.size = to - center
+    }
+
+    /// Checks if the specified vector is contained within the `Bounds`.
+    /// - Parameters:
+    ///   - target: The target vector
+    /// - Returns: whether the target vector is contained or not.
+    public func contains(target:Vector3) -> Bool {
+        let x = max.x >= target.x && min.x <= target.x
+        let y = max.y >= target.y && min.y <= target.y
+        let z = max.z >= target.z && min.z <= target.z
+        return x && y && z
+    }
+
+    public func unioned(with other:Bounds) -> Bounds {
+        let minVector = Vector3.min(self.min, other.min)
+        let maxVector = Vector3.max(self.max, other.max)
+
+        return Bounds(from:minVector, to:maxVector)
+    }
+
     /// Equivalence operator for two `Bounds`.
     public static func == (left:Bounds, right:Bounds) -> Bool {
         return left.center == right.center && left.size == right.size
