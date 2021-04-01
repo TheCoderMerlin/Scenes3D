@@ -18,7 +18,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 import Igis
 import Scenes
 
-/// An `Entity3D` object contains 3D objects that can be manipulated as a group.
+/// A `RenderableEntity3D` object contains 3D objects that can be manipulated as a group.
 public class RenderableEntity3D : IdentifiableObject {
     public private(set) weak var owningLayer3D : Layer3D?
     private var objects : [Object3D]
