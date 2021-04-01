@@ -27,6 +27,6 @@ internal struct Plane {
     }
 
     func distanceToPoint(_ point:Vector3) -> Double {
-        return normal.dot(with:point) + constant
+        return normal.dotProduct(with:point) + constant
     }
 }
