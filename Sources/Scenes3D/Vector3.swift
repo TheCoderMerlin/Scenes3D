@@ -55,7 +55,37 @@ public struct Vector3 : Equatable {
     /// - Parameters:
     ///   - quaternion: The `Quaternion` to use.
     public init(_ quaternion:Quaternion) {
-        self = Vector3.zero
+        let x2 = quaternion.x + quaternion.x
+        let y2 = quaternion.y + quaternion.y
+        let z2 = quaternion.z + quaternion.z
+
+        let xx = quaternion.x * x2
+        let xy = quaternion.x * y2
+        let xz = quaternion.x * z2
+        let yy = quaternion.y * y2
+        let yz = quaternion.y * z2
+        let zz = quaternion.z * z2
+        let wx = quaternion.w * x2
+        let wy = quaternion.w * y2
+        let wz = quaternion.w * z2
+
+        let m11 = (1 - ( yy + zz ))
+        let m12 = (xy - wz)
+        let m13 = (xz + wy)
+        let m22 = (1 - (xx + zz))
+        let m23 = (yz - wx)
+        let m32 = (yz + wx)
+        let m33 = (1 - (xx + yy))
+
+        y = asin(Swift.min(1.0, Swift.max(-1.0, m13)))
+
+        if abs(m13) < 0.999999 {
+            x = atan2(-m23, m33)
+            z = atan2(-m12, m11)
+        } else {
+            x = atan2(m32, m22)
+            z = 0
+        }
     }
 
     /// Returns a new vector rotated around a target `Vector3`.
