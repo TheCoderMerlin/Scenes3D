@@ -31,24 +31,10 @@ public class Cube : Object3D {
                     Vector3(x:position.x - size.x, y:position.y + size.y, z:position.z + size.z),
                     Vector3(x:position.x + size.x, y:position.y - size.y, z:position.z + size.z),
                     Vector3(x:position.x + size.x, y:position.y + size.y, z:position.z + size.z)]
-<<<<<<< HEAD
-        triangles = [(0, 1, 4),
-                     (0, 4, 2),
-                     (0, 1, 6),
-                     (1, 6, 7),
-                     (0, 2, 5),
-                     (5, 0, 3),
-                     (0, 6, 3),
-                     (7, 1, 4),
-                     (7, 5, 2),
-                     (7, 5, 3),
-                     (7, 2, 4),
-                     (7, 3, 6)]
 
         for i in 0..<vertices.count {
             vertices[i].rotateAround(point:position, by:rotation)
         }
-=======
         
         triangles = [(0, 1, 4), (0, 4, 2),
                      (0, 1, 6), (1, 6, 7),
@@ -56,7 +42,6 @@ public class Cube : Object3D {
                      (0, 6, 3), (7, 1, 4),
                      (7, 5, 2), (7, 5, 3),
                      (7, 2, 4), (7, 3, 6)]
->>>>>>> 69d0fb603545ac4485bd9cbba4a0ab40edf291d3
     }
 
     override internal func calculate(camera:Camera) {
