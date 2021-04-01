@@ -32,19 +32,24 @@ public class RenderableEntity3D : IdentifiableObject {
 
     internal func internalSetup(canvas:Canvas, layer3D:Layer3D) {
         owningLayer3D = layer3D
+        setup(canvasSize:canvas.canvasSize!, canvas:canvas)
     }
 
-    public func insert(object3D:Object3D) {
-        objects.append(object3D)
+    internal func internalTeardown() {
+        teardown()
     }
 
-    internal func calculate(camera:Camera) {
-        for object in objects {
-            object.calculate(camera:camera)
+    internal func internalCalculate(canvas:Canvas) {
+        calculate(canvasSize:canvas.canvasSize!)
+        if let owningLayer3D = owningLayer3D,
+           let camera = owningLayer3D.camera {
+            for object in objects {
+                object.calculate(camera:camera)
+            }
         }
     }
 
-    internal func render(canvas:Canvas) {
+    internal func internalRender(canvas:Canvas) {
         var renderComponents = [CanvasObject]()
         for object in objects {
             let renderComponent = object.renderComponents(fillMode:.fillAndStroke)
@@ -54,6 +59,10 @@ public class RenderableEntity3D : IdentifiableObject {
         }
         
         canvas.render(renderComponents)
+    }
+
+    public func insert(object3D:Object3D) {
+        objects.append(object3D)
     }
 
     public var layer3D : Layer3D {
@@ -73,5 +82,14 @@ public class RenderableEntity3D : IdentifiableObject {
 
     public var dispatcher : Dispatcher {
         return director.dispatcher
+    }
+
+    open func setup(canvasSize:Size, canvas:Canvas) {
+    }
+
+    open func teardown() {
+    }
+
+    open func calculate(canvasSize:Size) {
     }
 }

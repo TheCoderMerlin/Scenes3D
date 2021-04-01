@@ -20,12 +20,11 @@ import Scenes
 
 /// A 'Layer3D' is a layer object with support for rendering `RenderableEntity3D` objects.
 open class Layer3D : Layer {
-    private var entity3DList : [RenderableEntity3D]
-    
+    public private(set) var children : [RenderableEntity3D]
     public private(set) var camera : Camera?
     
     public override init(name:String?=nil) {
-        entity3DList = []
+        children = []
         
         super.init(name:name)
     }
@@ -33,22 +32,24 @@ open class Layer3D : Layer {
     /// All `Layer3D` calculations occur in the `postCalculate()` method so changes
     /// made during the calculate phase will be applied to all 3D objects.
     public override final func postCalculate(canvas:Canvas) {
+        // we can only calculate/render if a camera is set
         guard let camera = camera else {
             return
         }
 
-        // allow camera to calculate necessary properties
-        camera.preCalculate(canvasSize:canvas.canvasSize!)
+        // have camera calculate necessary matrices
+        camera.calculate()
 
-        // calculate all renderable entities (3d)
-        for entity3D in entity3DList {
-            entity3D.calculate(camera:camera)
+        // calculate each child based on the cameras properties
+        for child in children {
+            child.internalCalculate(canvas:canvas)
         }
     }
 
     /// All `Layer3D` rendering occurs in the `preRender()` method so that all
     /// 2D objects rendered to the layer will be applied on top of 3D objects.
     public override final func preRender(canvas:Canvas) {
+        // we can only calculate/render if a camera is set
         guard let camera = camera else {
             return
         }
@@ -65,8 +66,8 @@ open class Layer3D : Layer {
         }
 
         // Render all 3D entities
-        for entity3D in entity3DList {
-            entity3D.render(canvas:canvas)
+        for child in children {
+            child.internalRender(canvas:canvas)
         }
 
         // restore state if required
@@ -76,23 +77,36 @@ open class Layer3D : Layer {
         }
     }
 
+    public override final func preTeardown() {
+        camera?.removeParentLayer(self)
+        for child in children {
+            child.internalTeardown()
+        }
+    }
+
     /// Inserts a new `Entity3D` into this layer to receive updates.
     /// This function should only be invoked during init(), setup(), or calculate().
     public func insert(entity3D:RenderableEntity3D) {
-        precondition(!entity3DList.contains(entity3D), "Unable to insert specified RenderableEntity3D '\(entity3D.name)' because it is already inserted.")
-        entity3DList.append(entity3D)
+        precondition(!children.contains(entity3D), "Cannot insert specified RenderableEntity3D '\(entity3D.name)' because it is already inserted.")
+        children.append(entity3D)
     }
 
     /// Removes an `Entity3D` from this layer.
     /// This function should only be invoked during init(), setup(), or calculate().
     public func remove(entity3D:RenderableEntity3D) {
-        precondition(!entity3DList.contains(entity3D), "Unable to remove specified RenderableEntity3D '\(entity3D.name)' because it isn't inserted.")
-        entity3DList.removeAll {$0 == entity3D}
+        precondition(!children.contains(entity3D), "Cannot remove specified RenderableEntity3D '\(entity3D.name)' because it isn't inserted.")
+        children.removeAll {$0 == entity3D}
     }
 
     /// Sets the current `Camera` to use for rendering this layer.
     /// This function should only be invoked during init(), setup(), or calculate().
     public func setCamera(camera:Camera?) {
+        guard camera != self.camera else {
+            return
+        }
+
+        self.camera?.removeParentLayer(self)
         self.camera = camera
+        self.camera?.addParentLayer(self)
     }
 }

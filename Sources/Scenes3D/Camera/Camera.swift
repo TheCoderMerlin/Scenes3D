@@ -17,15 +17,17 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import Foundation
 import Igis
+import Scenes
 
 /// A `Camera` represents a viewport into 3D space.
-public class Camera {
+public class Camera : IdentifiableObject, CanvasResizeHandler {
     internal private(set) var clipPath : ClipPath?
     internal private(set) var projectionMatrix : Matrix4
-    
+
+    private var parentLayers : [Layer3D]
+    private var canvasRect : Rect
     private var needNewClipPath : Bool
     private var needNewProjectionMatrix : Bool
-    private var canvasSize : Size
     
     /// The field of view of the camera in degrees.
     public var fieldOfView : Double {
@@ -35,11 +37,12 @@ public class Camera {
         }
     }
     
+    internal var _viewportRect : Rect {
+        return viewportRect ?? canvasRect
+    }
+    
     /// Where on the screen the camera is rendered.
     /// If set to nil, camera will assume canvasSize.
-    internal var _viewportRect : Rect {
-        return viewportRect ?? Rect(topLeft:Point.zero, size:canvasSize)
-    }
     public var viewportRect : Rect? {
         didSet {
             needNewClipPath = true
@@ -84,15 +87,14 @@ public class Camera {
 
         clipPath = nil
         projectionMatrix = Matrix4.identity
-        canvasSize = Size.zero
 
+        parentLayers = []
+        canvasRect = Rect.zero
         needNewClipPath = true
         needNewProjectionMatrix = true
     }
 
-    internal func preCalculate(canvasSize:Size) {
-        self.canvasSize = canvasSize
-        
+    internal func calculate() {
         // calculate a new clip path if needed
         if needNewClipPath {
             if let viewportRect = viewportRect {
@@ -116,6 +118,26 @@ public class Camera {
                                                [0.0,   0.0,   b,     0.0]])
             
             needNewProjectionMatrix = false
+        }
+    }
+
+    public final func onCanvasResize(size:Size) {
+        canvasRect = Rect(size:size)
+    }
+
+    internal func addParentLayer(_ layer3D:Layer3D) {
+        parentLayers.append(layer3D)
+
+        if parentLayers.count == 1 {
+            layer3D.dispatcher.registerCanvasResizeHandler(handler:self)
+        }
+    }
+
+    internal func removeParentLayer(_ layer3D:Layer3D) {
+        parentLayers.removeAll {$0 == layer3D}
+
+        if parentLayers.isEmpty {
+            layer3D.dispatcher.unregisterCanvasResizeHandler(handler:self)
         }
     }
 }
