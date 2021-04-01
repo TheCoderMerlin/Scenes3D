@@ -17,6 +17,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import Igis
 
+// This object is currently used for experimentation only (actual object will be rectangular prism)
 public class Cube : Object3D {
     public init(position:Vector3, size:Vector3) {
         super.init()
@@ -30,18 +31,13 @@ public class Cube : Object3D {
                     Vector3(x:position.x - size.x, y:position.y + size.y, z:position.z + size.z),
                     Vector3(x:position.x + size.x, y:position.y - size.y, z:position.z + size.z),
                     Vector3(x:position.x + size.x, y:position.y + size.y, z:position.z + size.z)]
-        triangles = [(0, 1, 4),
-                     (0, 4, 2),
-                     (0, 1, 6),
-                     (1, 6, 7),
-                     (0, 2, 5),
-                     (5, 0, 3),
-                     (0, 6, 3),
-                     (7, 1, 4),
-                     (7, 5, 2),
-                     (7, 5, 3),
-                     (7, 2, 4),
-                     (7, 3, 6)]
+        
+        triangles = [(0, 1, 4), (0, 4, 2),
+                     (0, 1, 6), (1, 6, 7),
+                     (0, 2, 5), (5, 0, 3),
+                     (0, 6, 3), (7, 1, 4),
+                     (7, 5, 2), (7, 5, 3),
+                     (7, 2, 4), (7, 3, 6)]
     }
 
     override internal func calculate(camera:Camera) {

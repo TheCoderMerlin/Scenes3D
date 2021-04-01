@@ -18,8 +18,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 import Foundation
 import Igis
 
-/// A `Vector3` represents a point in 3D space, and is typically used to define the position and size of a three-dimensional object.
-public struct Vector3 : Equatable, AdditiveArithmetic {
+/// A `Vector3` represents a point in 3D space, and is typically
+/// used to define the position and size of a three-dimensional object.
+public struct Vector3 : Equatable {
     /// The coordinate along the x-axis.
     public var x : Double
     /// The coordinate along the y-axis.
@@ -28,9 +29,9 @@ public struct Vector3 : Equatable, AdditiveArithmetic {
     public var z : Double
 
     /// The vector3 (x:0, y:0, z:0).
-    static public let zero = Vector3(x:0, y:0, z:0)
+    public static let zero = Vector3(x:0, y:0, z:0)
     /// The vector3 (x:1, y:1, z:1).
-    static public let one = Vector3(x:1, y:1, z:1)
+    public static let one = Vector3(x:1, y:1, z:1)
 
     /// Creates a new `Vector3` with the properties (x:0, y:0, z:0).
     public init() {
@@ -169,6 +170,11 @@ public struct Vector3 : Equatable, AdditiveArithmetic {
         return Vector3(x:left.x + right.x, y:left.y + right.y, z:left.z + right.z)
     }
 
+    /// Compound addition operator for two `Vector3`s.
+    public static func += (left:inout Vector3, right:Vector3) {
+        left = left + right
+    }
+
     /// Negation operator for a `Vector3`.
     public static prefix func - (vector3:Vector3) -> Vector3 {
         return Vector3(x:-vector3.x, y:-vector3.y, z:-vector3.z)
@@ -179,13 +185,28 @@ public struct Vector3 : Equatable, AdditiveArithmetic {
         return left + -right
     }
 
+    /// Compound subtraction operator for two `Vector3`s.
+    public static func -= (left:inout Vector3, right:Vector3) {
+        left = left - right
+    }
+
     /// Multiplication operator for two `Vector3`s.
     public static func * (left:Vector3, right:Vector3) -> Vector3 {
         return Vector3(x:left.x * right.x, y:left.y * right.y, z:left.z * right.z)
     }
 
+    /// Compound multiplication operator for two `Vector3`s.
+    public static func *= (left:inout Vector3, right:Vector3) {
+        left = left * right
+    }
+
     /// Division operator for two `Vector3`s.
     public static func / (left:Vector3, right:Vector3) -> Vector3 {
         return Vector3(x:left.x / right.x, y:left.y / right.y, z:left.z / right.z)
+    }
+
+    /// Compound division operator for two `Vector3`s.
+    public static func /= (left:inout Vector3, right:Vector3) {
+        left = left / right
     }
 }

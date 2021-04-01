@@ -18,7 +18,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 import Igis
 import Scenes
 
-/// A 'Layer3D' is a layer object with support for rendering `Entity3D` objects.
+/// A 'Layer3D' is a layer object with support for rendering `RenderableEntity3D` objects.
 open class Layer3D : Layer {
     private var entity3DList : [RenderableEntity3D]
     

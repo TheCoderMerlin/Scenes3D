@@ -38,7 +38,7 @@ public struct Bounds : Equatable {
     }
 
     /// The bounds (position:Vector3.zero, size:Vector3.one)
-    static public var zero = Bounds()
+    public static var zero = Bounds()
 
     /// Creates a new `Bounds` object from the specified attributes.
     /// - Parameters:
@@ -59,9 +59,8 @@ public struct Bounds : Equatable {
     }
 
     /// Checks if the specified vector is contained within the `Bounds`.
-    /// - Parameters:
-    ///   - target: The target vector
-    /// - Returns: whether the target vector is contained or not.
+    /// - Returns: A boolean value indicitive of whether the target
+    ///            vector is contained or not.
     public func contains(target:Vector3) -> Bool {
         let x = max.x >= target.x && min.x <= target.x
         let y = max.y >= target.y && min.y <= target.y
@@ -69,6 +68,9 @@ public struct Bounds : Equatable {
         return x && y && z
     }
 
+    /// Union of this `Bounds` with the specified target `Bounds`.
+    /// - Returns: A new `Bounds` exactly large enough to contain
+    ///            both bounds.
     public func unioned(with other:Bounds) -> Bounds {
         let minVector = Vector3.min(self.min, other.min)
         let maxVector = Vector3.max(self.max, other.max)

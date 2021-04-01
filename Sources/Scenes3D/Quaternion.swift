@@ -39,7 +39,7 @@ public struct Quaternion : Equatable {
     }
 
     /// The quaternion (x:0, y:0, z:0, w:1)
-    static public var identity = Quaternion(x:0, y:0, z:0, w:1)
+    public static var identity = Quaternion(x:0, y:0, z:0, w:1)
 
     /// Creates a new `Quaternion` with its identity properties.
     public init() {
@@ -98,12 +98,14 @@ public struct Quaternion : Equatable {
     }
 
     /// Equivalence operator for two `Quaternion`s.
-    static public func == (left:Quaternion, right:Quaternion) -> Bool {
-        return left.w == right.w && left.x == right.x && left.y == right.y && left.z == right.z
+    public static func == (left:Quaternion, right:Quaternion) -> Bool {
+        return left.w == right.w && left.x == right.x &&
+          left.y == right.y && left.z == right.z
     }
 
     /// Addition opperator for two `Quaternion`s.
-    static public func + (left:Quaternion, right:Quaternion) -> Quaternion {
-        return Quaternion(x:left.x + right.x, y:left.y + right.y, z:left.z + right.x, w:left.w + right.w)
+    public static func + (left:Quaternion, right:Quaternion) -> Quaternion {
+        return Quaternion(x:left.x + right.x, y:left.y + right.y,
+                          z:left.z + right.x, w:left.w + right.w)
     }
 }
