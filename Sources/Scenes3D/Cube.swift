@@ -18,7 +18,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 import Igis
 
 public class Cube : Object3D {
-    public init(position:Vector3, size:Vector3) {
+    public init(position:Vector3, rotation:Vector3, size:Vector3) {
         super.init()
         inCameraView = true
 
@@ -42,6 +42,10 @@ public class Cube : Object3D {
                      (7, 5, 3),
                      (7, 2, 4),
                      (7, 3, 6)]
+
+        for i in 0..<vertices.count {
+            vertices[i].rotateAround(point:position, by:rotation)
+        }
     }
 
     override internal func calculate(camera:Camera) {
