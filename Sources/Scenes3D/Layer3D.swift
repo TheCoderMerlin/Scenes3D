@@ -29,6 +29,12 @@ open class Layer3D : Layer {
         super.init(name:name)
     }
 
+    /// If a `Camera` was added before `Setup` was invoked, we need to
+    /// set it up now.
+    public override final func preSetup(canvasSize:Size, canvas:Canvas) {
+        camera?.addParentLayer(self)
+    }
+
     /// All `Layer3D` calculations occur in the `postCalculate()` method so changes
     /// made during the calculate phase will be applied to all 3D objects.
     public override final func postCalculate(canvas:Canvas) {
@@ -101,7 +107,7 @@ open class Layer3D : Layer {
     /// Sets the current `Camera` to use for rendering this layer.
     /// This function should only be invoked during init(), setup(), or calculate().
     public func setCamera(camera:Camera?) {
-        guard camera != self.camera else {
+        guard owningScene != nil && camera != self.camera else {
             return
         }
 
