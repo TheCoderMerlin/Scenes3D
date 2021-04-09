@@ -33,6 +33,10 @@ open class Layer3D : Layer {
     /// set it up now.
     public override final func preSetup(canvasSize:Size, canvas:Canvas) {
         camera?.addParentLayer(self)
+
+        for child in children {
+            child.internalSetup(canvas:canvas, layer3D:self)
+        }
     }
 
     /// All `Layer3D` calculations occur in the `postCalculate()` method so changes
@@ -44,7 +48,7 @@ open class Layer3D : Layer {
         }
 
         // have camera calculate necessary matrices
-        camera.calculate()
+        camera.calculate(canvasSize:canvas.canvasSize!)
 
         // calculate each child based on the cameras properties
         for child in children {
@@ -107,12 +111,16 @@ open class Layer3D : Layer {
     /// Sets the current `Camera` to use for rendering this layer.
     /// This function should only be invoked during init(), setup(), or calculate().
     public func setCamera(camera:Camera?) {
-        guard owningScene != nil && camera != self.camera else {
+        guard camera != self.camera else {
             return
         }
 
-        self.camera?.removeParentLayer(self)
-        self.camera = camera
-        self.camera?.addParentLayer(self)
+        if owningScene == nil {
+            self.camera = camera
+        } else {
+            self.camera?.removeParentLayer(self)
+            self.camera = camera
+            self.camera?.addParentLayer(self)
+        }
     }
 }

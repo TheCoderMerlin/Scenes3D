@@ -94,7 +94,7 @@ public class Camera : IdentifiableObject, CanvasResizeHandler {
         needNewProjectionMatrix = true
     }
 
-    internal func calculate() {
+    internal func calculate(canvasSize:Size) {
         // calculate a new clip path if needed
         if needNewClipPath {
             if let viewportRect = viewportRect {
@@ -103,6 +103,11 @@ public class Camera : IdentifiableObject, CanvasResizeHandler {
             }
 
             needNewClipPath = false
+        }
+
+        // set canvasSize if needed
+        if canvasSize != canvasRect.size {
+            canvasRect.size = canvasSize
         }
 
         // calculates a new projection matrix if needed

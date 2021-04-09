@@ -50,14 +50,15 @@ public class RenderableEntity3D : IdentifiableObject {
     }
 
     internal func internalRender(canvas:Canvas) {
-        var renderComponents = [CanvasObject]()
+        var renderComponents : [CanvasObject] = []
+        
         for object in objects {
-            let renderComponent = object.renderComponents(fillMode:.fillAndStroke)
-            for component in renderComponent {
+            let objectRenderComponents = object.renderComponents(fillMode:.fillAndStroke)
+            for component in objectRenderComponents {
                 renderComponents.append(component)
             }
         }
-        
+
         canvas.render(renderComponents)
     }
 

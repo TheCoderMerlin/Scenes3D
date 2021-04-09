@@ -44,7 +44,7 @@ public class Cube : Object3D {
                      (7, 2, 4), (7, 3, 6)]
     }
 
-    override internal func calculate(camera:Camera) {
+    internal override func calculate(camera:Camera) {
         calculatedVertices = []
         for vertice in vertices {
             calculatedVertices.append(vertice)
