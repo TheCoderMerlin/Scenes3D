@@ -19,8 +19,17 @@ import Igis
 
 // This object is currently used for experimentation only (actual object will be rectangular prism)
 public class Cube : Object3D {
+    public var position : Vector3
+    public var rotation : Vector3
+    public var size : Vector3
+    
     public init(position:Vector3, rotation:Vector3, size:Vector3) {
+        self.position = position
+        self.rotation = rotation
+        self.size = size
+        
         super.init()
+        
         inCameraView = true
 
         vertices = [Vector3(x:position.x - size.x, y:position.y - size.y, z:position.z - size.z),
@@ -31,10 +40,6 @@ public class Cube : Object3D {
                     Vector3(x:position.x - size.x, y:position.y + size.y, z:position.z + size.z),
                     Vector3(x:position.x + size.x, y:position.y - size.y, z:position.z + size.z),
                     Vector3(x:position.x + size.x, y:position.y + size.y, z:position.z + size.z)]
-
-        for i in 0..<vertices.count {
-            vertices[i].rotateAround(point:position, by:rotation)
-        }
         
         triangles = [(0, 1, 4), (0, 4, 2),
                      (0, 1, 6), (1, 6, 7),
@@ -47,7 +52,7 @@ public class Cube : Object3D {
     internal override func calculate(camera:Camera) {
         calculatedVertices = []
         for vertice in vertices {
-            calculatedVertices.append(vertice)
+            calculatedVertices.append(vertice.rotatingAround(point:position, by:rotation))
         }
 
         calculated2DVertices = []
