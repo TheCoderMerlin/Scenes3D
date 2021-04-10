@@ -25,12 +25,12 @@ public class Transform3D : Equatable {
     /// This value is modifiable and will alter the rotation of the transform3d.
     public var quaternion : Quaternion
 
-    public var orientation : Vector3 {
+    public var rotation : Vector3 {
         get {
             return quaternion.euler
         }
-        set (orientation) {
-            quaternion.euler = orientation
+        set (rotation) {
+            quaternion.euler = rotation
         }
     }
     
@@ -53,9 +53,9 @@ public class Transform3D : Equatable {
         self.children = []
     }
 
-    public init(position:Vector3 = Vector3.zero, orientation:Vector3, size:Vector3 = Vector3.one) {
+    public init(position:Vector3 = Vector3.zero, rotation:Vector3, size:Vector3 = Vector3.one) {
         self.position = position
-        self.quaternion = Quaternion(orientation)
+        self.quaternion = Quaternion(rotation)
         self.size = size
         self.children = []
     }
@@ -90,6 +90,8 @@ public class Transform3D : Equatable {
     ///    - by: The value of the objects rotation.  
     public func rotateAround(point:Transform3D, by change:Quaternion) {
         self.position.rotateAround(point:point.position, by:change)
+
+        // TODO: Call an object 3D method to call all of the objects vertices rotateAround function.
     }
 
     public func rotateAround(point:Transform3D, by change:Vector3) {
@@ -112,6 +114,6 @@ public class Transform3D : Equatable {
     
     /// Equivalence operator for two transform3d's.
     public static func == (left:Transform3D, right:Transform3D) -> Bool {
-        return left.position == right.position && left.orientation == right.orientation && left.size == right.size
+        return left.position == right.position && left.rotation == right.rotation && left.size == right.size
     }
 }

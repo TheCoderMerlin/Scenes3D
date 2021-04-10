@@ -22,7 +22,7 @@ public class Cube : Object3D {
     public var transform : Transform3D
     
     public init(position:Vector3, rotation:Vector3, size:Vector3) {
-        self.transform = Transform3D(position:position, orientation:rotation, size:size)
+        self.transform = Transform3D(position:position, rotation:rotation, size:size)
         
         super.init()
         
@@ -48,7 +48,7 @@ public class Cube : Object3D {
     internal override func calculate(camera:Camera) {
         calculatedVertices = []
         for vertice in vertices {
-            calculatedVertices.append(vertice.rotatingAround(point:transform.position, by:transform.orientation))
+            calculatedVertices.append(vertice.rotatingAround(point:transform.position, by:transform.rotation))
         }
 
         calculated2DVertices = []
