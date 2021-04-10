@@ -19,12 +19,10 @@ import Igis
 
 // This object is currently used for experimentation only (actual object will be rectangular prism)
 public class Cube : Object3D {
-    public var transform : Transform3D
-    
     public init(position:Vector3, rotation:Vector3, size:Vector3) {
-        self.transform = Transform3D(position:position, rotation:rotation, size:size)
+        let transform = Transform3D(position:position, rotation:rotation, size:size)
         
-        super.init()
+        super.init(transform:transform)
         
         inCameraView = true
 
@@ -46,16 +44,5 @@ public class Cube : Object3D {
     }
 
     internal override func calculate(camera:Camera) {
-        calculatedVertices = []
-        for vertice in vertices {
-            calculatedVertices.append(vertice.rotatingAround(point:transform.position, by:transform.rotation))
-        }
-
-        calculated2DVertices = []
-        for vertice in calculatedVertices {
-            let point = Point(x:Int(vertice.x / vertice.z) + camera._viewportRect.width/2,
-                              y:Int(vertice.y / vertice.z) + camera._viewportRect.height/2)
-            calculated2DVertices.append(point)
-        }
     }
 }
