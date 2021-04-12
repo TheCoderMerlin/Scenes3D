@@ -17,11 +17,16 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 /// A `Bounds` object represents an axis-aligned bounding box in 3D space.
 public struct Bounds : Equatable {
-    /// The center of the bounding box.
-    public var center : Vector3
-    /// The total size of the bounding box.
-    public var size : Vector3
+    public var transform : Transform3D
 
+    public var center : Vector3 {
+        return transform.position
+    }
+
+    public var size : Vector3 {
+        return transform.size
+    }
+    
       /// The extents of the bounding box. This is always half of the bounds size.
     public var extents : Vector3 {
         return Vector3(x:abs(size.x)/2, y:abs(size.y)/2, z:abs(size.z)/2)
@@ -45,8 +50,15 @@ public struct Bounds : Equatable {
     ///   - center: The center of the bounding box.
     ///   - size: The total size of the bounding box.
     public init(center:Vector3 = Vector3.zero, size:Vector3 = Vector3.one) {
-        self.center = center
-        self.size = size
+        self.transform = Transform3D(position:center, size:size)
+    }
+
+    /// Creates a new `Bounds` object from a transform.
+    /// - Parameters:
+    ///   - transform: The transform with the specified attributes.
+    public init(transfrom:Transform3D) {
+        self.transform = transform
+        self.transform.rotation = Vector3.zero
     }
 
     /// Creates a new `Bounds` object between the specified points.
@@ -54,8 +66,9 @@ public struct Bounds : Equatable {
     ///   - from: The starting point.
     ///   - to: The ending point.
     public init(from:Vector3, to:Vector3) {
-        self.center = to - from / Vector3(x:2, y:2, z:2)
-        self.size = to - center
+        let center = to - from / Vector3(x:2, y:2, z:2)
+        let size = to - center
+        self.transform = Transform3D(position:center, size:size)
     }
 
     /// Checks if the specified vector is contained within the `Bounds`.

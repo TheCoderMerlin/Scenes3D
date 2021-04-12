@@ -53,7 +53,7 @@ public class Transform3D : Equatable {
         self.children = []
     }
 
-    public init(position:Vector3 = Vector3.zero, rotation:Vector3, size:Vector3 = Vector3.one) {
+    public init(position:Vector3 = Vector3.zero, rotation:Vector3 = Vector3.zero, size:Vector3 = Vector3.one) {
         self.position = position
         self.quaternion = Quaternion(rotation)
         self.size = size
