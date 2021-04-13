@@ -53,13 +53,12 @@ public class Object3D {
     }
     
     internal func renderComponents(fillMode:FillMode) -> [CanvasObject] {
-        guard inCameraView && !triangles.isEmpty else {
+        guard inCameraView && !triangles.isEmpty && !calculated2DVertices.isEmpty else {
             return []
         }
 
         var trianglePaths : [CanvasObject] = []
-        print(vertices[0])
-        print(calculatedVertices[0])
+
         for triangle in triangles {
             let trianglePath = Path(fillMode:fillMode)
             trianglePath.moveTo(calculated2DVertices[triangle.point1])

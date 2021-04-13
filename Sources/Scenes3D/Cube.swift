@@ -42,7 +42,4 @@ public class Cube : Object3D {
                      (7, 5, 2), (7, 5, 3),
                      (7, 2, 4), (7, 3, 6)]
     }
-
-    internal override func calculate(camera:Camera) {
-    }
 }
