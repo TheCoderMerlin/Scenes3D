@@ -46,8 +46,8 @@ public class Object3D {
 
         calculated2DVertices = []
         for vertice in calculatedVertices {
-            let point = Point(x:Int(vertice.x / vertice.z) + camera._viewportRect.width/2,
-                              y:Int(vertice.y / vertice.z) + camera._viewportRect.height/2)
+            let point = Point(x:Int(vertice.x / vertice.z) * camera.nearClipPlane + camera._viewportRect.width/2,
+                              y:Int(vertice.y / vertice.z) * camera.nearClipPlane + camera._viewportRect.height/2)
             calculated2DVertices.append(point)
         }
     }

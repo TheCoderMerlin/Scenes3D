@@ -32,8 +32,6 @@ open class Layer3D : Layer {
     /// If a `Camera` was added before `Setup` was invoked, we need to
     /// set it up now.
     public override final func preSetup(canvasSize:Size, canvas:Canvas) {
-        camera?.addParentLayer(self)
-
         for child in children {
             child.internalSetup(canvas:canvas, layer3D:self)
         }
@@ -88,7 +86,6 @@ open class Layer3D : Layer {
     }
 
     public override final func preTeardown() {
-        camera?.removeParentLayer(self)
         for child in children {
             child.internalTeardown()
         }
@@ -114,13 +111,7 @@ open class Layer3D : Layer {
         guard camera != self.camera else {
             return
         }
-
-        if owningScene == nil {
-            self.camera = camera
-        } else {
-            self.camera?.removeParentLayer(self)
-            self.camera = camera
-            self.camera?.addParentLayer(self)
-        }
+        
+        self.camera = camera
     }
 }
