@@ -41,5 +41,7 @@ public class Cube : Object3D {
                      (0, 6, 3), (7, 1, 4),
                      (7, 5, 2), (7, 5, 3),
                      (7, 2, 4), (7, 3, 6)]
+
+        strokeStyle = StrokeStyle(color:Color(.white))
     }
 }
