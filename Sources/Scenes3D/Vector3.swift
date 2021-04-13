@@ -93,10 +93,12 @@ public struct Vector3 : Equatable {
     ///   - point: The vector3 your rotating around.
     ///   - by: The value of the objects rotation as a `Quaternion`.
     public func rotatingAround(point:Vector3, by change:Quaternion) -> Vector3 {
-        let a = change.w
-        let b = change.x
-        let c = change.y
-        let d = change.z
+        let quaternion = change.normalized()
+        
+        let a = quaternion.w
+        let b = quaternion.x
+        let c = quaternion.y
+        let d = quaternion.z
 
         let m = self.x - point.x
         let n = self.y - point.y
@@ -137,6 +139,20 @@ public struct Vector3 : Equatable {
     public mutating func rotateAround(point:Vector3, by change:Vector3) {
         let quaternion = Quaternion(change)
         self = rotatingAround(point:point, by:quaternion)
+    }
+
+    public func applyingMatrix(matrix4:Matrix4) -> Vector3 {
+        let w = 1 / (matrix4.value(0, 3)*x + matrix4.value(1, 3)*y + matrix4.value(2, 3)*z + matrix4.value(3, 3))
+
+        let newX = (matrix4.value(0, 0)*x + matrix4.value(1, 0)*y + matrix4.value(2, 0)*z + matrix4.value(3, 0)) * w
+        let newY = (matrix4.value(0, 1)*x + matrix4.value(1, 1)*y + matrix4.value(2, 1)*z + matrix4.value(3, 1)) * w
+        let newZ = (matrix4.value(0, 2)*x + matrix4.value(1, 2)*y + matrix4.value(2, 2)*z + matrix4.value(3, 2)) * w
+        
+        return Vector3(x:newX, y:newY, z:newZ)
+    }
+
+    public mutating func applyMatrix(matrix4:Matrix4) {
+        self = self.applyingMatrix(matrix4:matrix4)
     }
 
     /// Calculates the square of the Euclidean distance between this vector3 and another.

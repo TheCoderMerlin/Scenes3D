@@ -45,7 +45,8 @@ public class Object3D {
         }
 
         var trianglePaths : [CanvasObject] = []
-
+        print(vertices[0])
+        print(calculatedVertices[0])
         for triangle in triangles {
             let trianglePath = Path(fillMode:fillMode)
             trianglePath.moveTo(calculated2DVertices[triangle.point1])

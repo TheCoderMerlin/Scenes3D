@@ -44,6 +44,59 @@ public class Matrix4 : CustomStringConvertible {
         }
         self.values = values
     }
+
+    public init(position:Vector3, quaternion:Quaternion, size:Vector3) {
+        let x = quaternion.x
+        let y = quaternion.y
+        let z = quaternion.z
+        let w = quaternion.w
+        
+        let x2 = x + x
+        let y2 = y + y
+        let z2 = z + z
+        
+        let xx = x * x2
+        let xy = x * y2
+        let xz = x * z2
+        
+        let yy = y * y2
+        let yz = y * z2
+        let zz = z * z2
+        
+        let wx = w * x2
+        let wy = w * y2
+        let wz = w * z2
+
+        let sx = size.x
+        let sy = size.y
+        let sz = size.z
+
+        values = []
+
+        values.append([(1 - (yy + zz)) * sx,
+                       (xy + wz) * sx,
+                       (wz - wy) * sx,
+                       0
+                      ])
+
+        values.append([(xy - wz) * sy,
+                       (1 - (xx + zz)) * sy,
+                       (yz + wx) * sy,
+                       0
+                      ])
+
+        values.append([(xz + wy) * sz,
+                       (yz - wx) * sz,
+                       (1 - (xx + yy)) * sz,
+                       0
+                      ])
+
+        values.append([position.x,
+                       position.y,
+                       position.z,
+                       1
+                      ])
+    }
     
     public var description : String {
         // Convert to strings and pad all to uniform length
@@ -81,5 +134,12 @@ public class Matrix4 : CustomStringConvertible {
         }
 
         return vector
+    }
+
+    /// Returns the value at the specified row and column index.
+    public func value(_ rowIndex:Int, _ columnIndex:Int) -> Double {
+        precondition((0..<4).contains(rowIndex), "Expected index in range 0..<4")
+        precondition((0..<4).contains(columnIndex), "Expected index in range 0..<4")
+        return values[rowIndex][columnIndex]
     }
 }
