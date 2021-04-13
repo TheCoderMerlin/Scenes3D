@@ -48,8 +48,9 @@ public class Object3D {
 
         calculated2DVertices = []
         for vertice in calculatedVertices {
-            let point = Point(x:Int(vertice.x / vertice.z) * camera.nearClipPlane + camera._viewportRect.width/2,
-                              y:Int(vertice.y / vertice.z) * camera.nearClipPlane + camera._viewportRect.height/2)
+            let perspective = camera.fieldOfView / (camera.fieldOfView + vertice.z)
+            let point = Point(x:Int(vertice.x * perspective) + camera._viewportRect.width/2,
+                              y:Int(vertice.y * perspective) + camera._viewportRect.height/2)
             calculated2DVertices.append(point)
         }
     }
@@ -62,13 +63,19 @@ public class Object3D {
         var canvasObjectArray : [CanvasObject] = [fillStyle, strokeStyle]
 
         for triangle in triangles {
-            let trianglePath = Path(fillMode:fillMode)
-            trianglePath.moveTo(calculated2DVertices[triangle.point1])
-            trianglePath.lineTo(calculated2DVertices[triangle.point2])
-            trianglePath.lineTo(calculated2DVertices[triangle.point3])
-            trianglePath.close()
+            if fillMode == .fill || fillMode == .fillAndStroke {
+                let trianglePath = Path(fillMode:.fill)
+                trianglePath.moveTo(calculated2DVertices[triangle.point1])
+                trianglePath.lineTo(calculated2DVertices[triangle.point2])
+                trianglePath.lineTo(calculated2DVertices[triangle.point3])
+                trianglePath.close()
 
-            canvasObjectArray.append(trianglePath)
+                canvasObjectArray.append(trianglePath)
+            }
+
+            if fillMode == .stroke || fillMode == .fillAndStroke {
+
+            }
         }
         return canvasObjectArray
     }
