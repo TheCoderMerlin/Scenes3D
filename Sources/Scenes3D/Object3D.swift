@@ -28,6 +28,8 @@ public class Object3D {
 
     public typealias Triangle = (point1:Int, point2:Int, point3:Int)
     public var triangles : [Triangle]
+    public var fillStyle : FillStyle = FillStyle(color:Color(.black))
+    public var strokeStyle : StrokeStyle = StrokeStyle(color:Color(.black))
 
     public init(transform:Transform3D) {
         inCameraView = false
@@ -57,7 +59,7 @@ public class Object3D {
             return []
         }
 
-        var trianglePaths : [CanvasObject] = []
+        var canvasObjectArray : [CanvasObject] = [fillStyle, strokeStyle]
 
         for triangle in triangles {
             let trianglePath = Path(fillMode:fillMode)
@@ -66,9 +68,8 @@ public class Object3D {
             trianglePath.lineTo(calculated2DVertices[triangle.point3])
             trianglePath.close()
 
-            trianglePaths.append(trianglePath)
+            canvasObjectArray.append(trianglePath)
         }
-        
-        return trianglePaths
+        return canvasObjectArray
     }
 }
