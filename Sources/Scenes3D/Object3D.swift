@@ -23,20 +23,33 @@ public class Object3D {
     internal var calculated2DVertices : [Point] // represent vertices transposed from local camera space to 2D screen space
     internal var calculatedVertices : [Vector3] // represent vertices in local camera space (saved to improve performance)
 
+    public var transform : Transform3D // represents the object in global space
     public var vertices : [Vector3] // represent verticies in global space
 
     public typealias Triangle = (point1:Int, point2:Int, point3:Int)
     public var triangles : [Triangle]
 
-    public init() {
+    public init(transform:Transform3D) {
         inCameraView = false
         calculated2DVertices = []
         calculatedVertices = []
+        self.transform = transform
         vertices = []
         triangles = []
     }
 
     internal func calculate(camera:Camera) {
+        calculatedVertices = []
+        for vertice in vertices {
+            calculatedVertices.append(vertice.rotatingAround(point:transform.position, by:transform.rotation))
+        }
+
+        calculated2DVertices = []
+        for vertice in calculatedVertices {
+            let point = Point(x:Int(vertice.x / vertice.z) + camera._viewportRect.width/2,
+                              y:Int(vertice.y / vertice.z) + camera._viewportRect.height/2)
+            calculated2DVertices.append(point)
+        }
     }
     
     internal func renderComponents(fillMode:FillMode) -> [CanvasObject] {

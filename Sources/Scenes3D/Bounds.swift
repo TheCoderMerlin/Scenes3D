@@ -17,11 +17,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 /// A `Bounds` object represents an axis-aligned bounding box in 3D space.
 public struct Bounds : Equatable {
-    /// The center of the bounding box.
     public var center : Vector3
-    /// The total size of the bounding box.
     public var size : Vector3
-
+    
       /// The extents of the bounding box. This is always half of the bounds size.
     public var extents : Vector3 {
         return Vector3(x:abs(size.x)/2, y:abs(size.y)/2, z:abs(size.z)/2)
