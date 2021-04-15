@@ -2,7 +2,7 @@
 Scenes3D provides a Swift object library with support for 3D renderable entities.
 Scenes3D runs on top of Scenes and IGIS.
 Copyright (C) 2021 William Jackson, William Paroff, Camden Thomson,
-                   Tango Golf Digital, LLC
+                   CoderMerlin.com
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
