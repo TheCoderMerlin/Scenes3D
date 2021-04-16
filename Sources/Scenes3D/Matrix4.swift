@@ -99,21 +99,42 @@ public class Matrix4 : CustomStringConvertible {
     }
     
     public var description : String {
-        // Convert to strings and pad all to uniform length
-        let allValues : [Double] = Array<Double>(values.joined())
-        let allStrings = allValues.map {"\($0)"}
-        let longestCount = allStrings.reduce(0) {(result:Int, s:String) in max(s.count, result)}
-        let paddingCount = longestCount + 2
-        let paddedStrings = allStrings.map {$0.padding(toLength:paddingCount, withPad:" ", startingAt:0)}
+        var allStrings : [String] = []
+        allStrings.reserveCapacity(16)
 
-        // Form the string
-        var s = ""
-        for row in 0..<4 {
-            s += "[ "
-            for column in 0..<4 {
-                s += paddedStrings[row * 4 + column]
+        // Find the longest of the string equivalents of each value in each column
+        var stringLengths : [Int] = Array(repeating:0, count:4)
+        for row in values {
+            for column in 0..<row.count {
+                let s = row[column].description
+                allStrings.append(s)
+                if s.count > stringLengths[column] {
+                    stringLengths[column] = s.count
+                }
             }
-            s += "]\n"
+        }
+
+        var paddedLengthsSum : Int = 0
+        for i in 0..<stringLengths.count {
+            let paddedLength = stringLengths[i] + 2
+            stringLengths[i] = paddedLength
+            paddedLengthsSum += paddedLength
+        }
+
+        var s = String()
+        // Each row has length paddedLengthsSum, plus five characters for "[" and "  ]\n"
+        s.reserveCapacity(4 * (paddedLengthsSum + 5))
+
+        for row in 0..<4 {
+            s.append("[")
+            for column in 0..<4 {
+                let currentString = allStrings[row * 4 + column]
+                for _ in 0..<(stringLengths[column] - currentString.count) {
+                    s.append(" ")
+                }
+                s.append(currentString)
+            }
+            s.append("  ]\n")
         }
 
         return s
