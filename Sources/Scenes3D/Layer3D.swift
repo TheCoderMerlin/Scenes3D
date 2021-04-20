@@ -50,7 +50,7 @@ open class Layer3D : Layer {
 
         // calculate each child based on the cameras properties
         for child in children {
-            child.internalCalculate(canvas:canvas)
+            child.internalCalculate(canvas:canvas, layer3D:self)
         }
     }
 
@@ -75,7 +75,7 @@ open class Layer3D : Layer {
 
         // Render all 3D entities
         for child in children {
-            child.internalRender(canvas:canvas)
+            child.internalRender(canvas:canvas, layer3D:self)
         }
 
         // restore state if required

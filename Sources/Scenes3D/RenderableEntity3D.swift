@@ -20,36 +20,76 @@ import Scenes
 
 /// A `RenderableEntity3D` object contains 3D objects that can be manipulated as a group.
 public class RenderableEntity3D : IdentifiableObject {
+    internal private(set) var wasSetup : Bool
+    internal private(set) var wasTorndown : Bool
+    internal private(set) var neverCalculated : Bool
+    
     public private(set) weak var owningLayer3D : Layer3D?
     private var objects : [Object3D]
 
     public override init(name:String?=nil) {
+        wasSetup = false
+        wasTorndown = false
+        neverCalculated = true
+        
         owningLayer3D = nil
         objects = []
 
         super.init(name:name)
     }
 
+    // ****************************************************************
+    // Functions for internal use
+    // ****************************************************************
     internal func internalSetup(canvas:Canvas, layer3D:Layer3D) {
+        precondition(!wasSetup && neverCalculated, "Request to setup 3D entity after already being setup")
+        precondition(owningLayer3D == nil, "Request to setup 3D entity but owningLayer3D is not nil")
+        precondition(canvas.canvasSize != nil, "Request to setup 3D entity but canvas.canvasSize is nil")
+        
         owningLayer3D = layer3D
         setup(canvasSize:canvas.canvasSize!, canvas:canvas)
+        wasSetup = true
     }
 
     internal func internalTeardown() {
+        precondition(wasSetup, "Request to teardown 3D entity that was not yet setup")
+        precondition(!wasTorndown, "Request to teardown 3D entity that was already torn down")
+        
         teardown()
+        wasTorndown = true
     }
 
-    internal func internalCalculate(canvas:Canvas) {
+    internal func internalCalculate(canvas:Canvas, layer3D:Layer3D) {
+        if !wasSetup {
+            internalSetup(canvas:canvas, layer3D:layer3D)
+        }
+
+        precondition(wasSetup, "Request to calculate 3D entity prior to setup")
+        precondition(owningLayer3D != nil, "Request to calculate 3D entity but owningLayer3D is nil")
+        precondition(canvas.canvasSize != nil, "Request to calculate 3D entity but canvas.canvasSize is nil")
+        
         calculate(canvasSize:canvas.canvasSize!)
+        
         if let owningLayer3D = owningLayer3D,
            let camera = owningLayer3D.camera {
             for object in objects {
                 object.calculate(camera:camera)
             }
         }
+
+        neverCalculated = false
     }
 
-    internal func internalRender(canvas:Canvas) {
+    internal func internalRender(canvas:Canvas, layer3D:Layer3D) {
+        if neverCalculated {
+            internalCalculate(canvas:canvas, layer3D:layer3D)
+        }
+
+        precondition(wasSetup, "Request to render 3D object prior to setup")
+        precondition(owningLayer3D != nil, "Request to render 3D entity but owningLayer3D is nil")
+        precondition(!neverCalculated, "Request to render 3D entity but never calculated")
+        precondition(canvas.canvasSize != nil, "Request to render 3D entity but canvas.canvasSize is nil")
+        
         var renderComponents : [CanvasObject] = []
         
         for object in objects {
@@ -84,6 +124,11 @@ public class RenderableEntity3D : IdentifiableObject {
     public var dispatcher : Dispatcher {
         return director.dispatcher
     }
+
+    // ***************************************************************
+    // API FOLLOWS
+    // These functions should be over-ridden by descendant classes
+    // ****************************************************************
 
     open func setup(canvasSize:Size, canvas:Canvas) {
     }
