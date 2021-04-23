@@ -18,7 +18,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 import Igis
 
 // This is a crude mock-up (most properties are likely to change)
-public class Object3D {
+public class Object3D : Transformable {
     internal var inCameraView : Bool
     internal var calculated2DVertices : [Point] // represent vertices transposed from local camera space to 2D screen space
     internal var calculatedVertices : [Vector3] // represent vertices in local camera space (saved to improve performance)

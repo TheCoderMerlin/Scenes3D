@@ -25,6 +25,8 @@ public class Transform3D : Equatable {
     /// This value is modifiable and will alter the rotation of the transform3d.
     public var quaternion : Quaternion
 
+    /// The orientation of the transform3d along all rotational axis.
+    /// This value is modifiable and will alter the rotation of the transform3d.
     public var rotation : Vector3 {
         get {
             return quaternion.euler
@@ -53,7 +55,12 @@ public class Transform3D : Equatable {
         self.children = []
     }
 
-    public init(position:Vector3 = Vector3.zero, rotation:Vector3 = Vector3.zero, size:Vector3 = Vector3.one) {
+    /// Creates a new transform3d from the specified values.
+    /// - Parameters:
+    ///   - position : The transform3d's position. Default value is Vector3.zero
+    ///   - orientation : The transform3d's rotational orientation.
+    ///   - size : The transform3d's size. Default value is Vector3.one
+    public init(position:Vector3 = Vector3.zero, rotation:Vector3, size:Vector3 = Vector3.one) {
         self.position = position
         self.quaternion = Quaternion(rotation)
         self.size = size

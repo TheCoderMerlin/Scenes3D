@@ -20,11 +20,11 @@ import Scenes
 
 /// A 'Layer3D' is a layer object with support for rendering `RenderableEntity3D` objects.
 open class Layer3D : Layer {
-    public private(set) var children : [RenderableEntity3D]
+    public private(set) var entities : [RenderableEntity3D]
     public private(set) var camera : Camera?
     
     public override init(name:String?=nil) {
-        children = []
+        entities = [RenderableEntity3D]()
         
         super.init(name:name)
     }
@@ -32,8 +32,8 @@ open class Layer3D : Layer {
     /// If a `Camera` was added before `Setup` was invoked, we need to
     /// set it up now.
     public override final func preSetup(canvasSize:Size, canvas:Canvas) {
-        for child in children {
-            child.internalSetup(canvas:canvas, layer3D:self)
+        for entity in entities {
+            entity.internalSetup(canvas:canvas, layer3D:self)
         }
     }
 
@@ -49,8 +49,8 @@ open class Layer3D : Layer {
         camera.calculate(canvasSize:canvas.canvasSize!)
 
         // calculate each child based on the cameras properties
-        for child in children {
-            child.internalCalculate(canvas:canvas, layer3D:self)
+        for entity in entities {
+            entity.internalCalculate(canvas:canvas, layer3D:self)
         }
     }
 
@@ -74,8 +74,8 @@ open class Layer3D : Layer {
         }
 
         // Render all 3D entities
-        for child in children {
-            child.internalRender(canvas:canvas, layer3D:self)
+        for entity in entities {
+            entity.internalRender(canvas:canvas, layer3D:self)
         }
 
         // restore state if required
@@ -86,23 +86,23 @@ open class Layer3D : Layer {
     }
 
     public override final func preTeardown() {
-        for child in children {
-            child.internalTeardown()
+        for entity in entities {
+            entity.internalTeardown()
         }
     }
 
     /// Inserts a new `Entity3D` into this layer to receive updates.
     /// This function should only be invoked during init(), setup(), or calculate().
     public func insert(entity3D:RenderableEntity3D) {
-        precondition(!children.contains(entity3D), "Cannot insert specified RenderableEntity3D '\(entity3D.name)' because it is already inserted.")
-        children.append(entity3D)
+        precondition(!entities.contains(entity3D), "Cannot insert specified RenderableEntity3D '\(entity3D.name)' because it is already inserted.")
+        entities.append(entity3D)
     }
 
     /// Removes an `Entity3D` from this layer.
     /// This function should only be invoked during init(), setup(), or calculate().
     public func remove(entity3D:RenderableEntity3D) {
-        precondition(!children.contains(entity3D), "Cannot remove specified RenderableEntity3D '\(entity3D.name)' because it isn't inserted.")
-        children.removeAll {$0 == entity3D}
+        precondition(entities.contains(entity3D), "Cannot remove specified RenderableEntity3D '\(entity3D.name)' because it isn't inserted.")
+        entities.removeAll {$0 == entity3D}
     }
 
     /// Sets the current `Camera` to use for rendering this layer.

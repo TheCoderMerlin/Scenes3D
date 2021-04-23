@@ -20,13 +20,15 @@ import Igis
 import Scenes
 
 /// A `Camera` represents a viewport into 3D space.
-public class Camera : IdentifiableObject {
+public class Camera : IdentifiableObject, Transformable {
     internal private(set) var clipPath : ClipPath?
     internal private(set) var projectionMatrix : Matrix4
 
     private var canvasRect : Rect
     private var needNewClipPath : Bool
     private var needNewProjectionMatrix : Bool
+
+    public var transform : Transform3D
     
     /// The field of view of the camera in degrees.
     public var fieldOfView : Double {
@@ -78,6 +80,8 @@ public class Camera : IdentifiableObject {
         precondition(nearClipPlane > 0, "Camera nearClipPlane must be greater than 0.")
         precondition(farClipPlane > nearClipPlane, "Camera farClipPlane must be larger than nearClipPlane.")
         precondition(farClipPlane > 0, "Camera farClipPlane must be greater than 0.")
+
+        self.transform = Transform3D()
         
         self.fieldOfView = fieldOfView
         self.viewportRect = viewportRect
