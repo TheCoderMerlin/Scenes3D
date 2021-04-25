@@ -81,14 +81,16 @@ public class Transform3D : Equatable {
     /// - Parameters:
     ///    - by: The change value.
     public func rotate(by change:Quaternion) {
-        self.quaternion = quaternion + change
-        for child in children {
-            child.rotateAround(point:self, by:change)
-        }
+        rotate(by:change.euler)
     }
 
     public func rotate(by change:Vector3) {
-        rotate(by:Quaternion(change))
+        self.rotation.x = rotation.x + change.x.asRadians
+        self.rotation.y = rotation.y + change.y.asRadians
+        self.rotation.z = rotation.z + change.z.asRadians
+        for child in children {
+            child.rotateAround(point:self, by:Quaternion(change))
+        }
     }
 
     /// Rotates an transform3d around another transform3d
@@ -97,8 +99,7 @@ public class Transform3D : Equatable {
     ///    - by: The value of the objects rotation.  
     public func rotateAround(point:Transform3D, by change:Quaternion) {
         self.position.rotateAround(point:point.position, by:change)
-
-        // TODO: Call an object 3D method to call all of the objects vertices rotateAround function.
+        rotate(by:change)
     }
 
     public func rotateAround(point:Transform3D, by change:Vector3) {
