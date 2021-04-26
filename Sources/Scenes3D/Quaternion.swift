@@ -29,6 +29,7 @@ public struct Quaternion : Equatable {
     /// The w-coordinate.
     public var w : Double
 
+    /// A `Vector3` describing this angle in euler coordinates.
     public var euler : Vector3 {
         get {
             return Vector3(self)
@@ -77,24 +78,42 @@ public struct Quaternion : Equatable {
         w = (c1 * c2 * c3) - (s1 * s2 * s3)
     }
 
+    /// Calculates the square of the length of this quaternion.
+    /// - Returns: The square of the length of this quaternion.
+    public func lengthSquared() -> Double {
+        return (x * x) + (y * y) + (z * z) + (w * w)
+    }
+
+    /// Calculates the length of this quaternion.
+    /// - Returns: The length of this quaternion.
+    public func length() -> Double {
+        return sqrt(lengthSquared())
+    }
+
     /// Returns a new quaternion with a magnitude of 1.
     /// The normalized quaternion keeps the same orientation, but its magnitude is changed to 1.0.
     /// - Returns: The normalized quaternion
     public func normalized() -> Quaternion {
-        let normal = sqrt(x*x + y*y + z*z + w*w)
-        let quaternion = Quaternion(x:x / normal, y:y / normal,
-                                    z:z / normal, w:w / normal)
-        return quaternion
+        var length = self.length()
+
+        guard length != 0 else {
+            return Quaternion.identity
+        }
+
+        length = 1 / length
+
+        let newX = x * length
+        let newY = y * length
+        let newZ = z * length
+        let newW = w * length
+
+        return Quaternion(x:newX, y:newY, z:newZ, w:newW)
     }
 
     /// Normalizes the quaternion to a magnitude of 1.
     /// When normalized, a quaternion keeps the same orientation, but its magnuture is changed to 1.0.
     public mutating func normalize() {
-        let normalizedQuaternion = normalized()
-        x = normalizedQuaternion.x
-        y = normalizedQuaternion.y
-        z = normalizedQuaternion.z
-        w = normalizedQuaternion.w
+        self = self.normalized()
     }
 
     /// Equivalence operator for two `Quaternion`s.
