@@ -180,6 +180,18 @@ public struct Vector3 : Equatable {
         return sqrt(Double(distanceSquared(to:target)))
     }
 
+    /// Calculates the square of the length of this vector3.
+    /// - Returns: The square of the length of this vector3.
+    public func lengthSquared() -> Double {
+        return (x * x) + (y * y) + (z * z)
+    }
+
+    /// Calculates the length of this vector3.
+    /// - Returns: The length of this vector3.
+    public func length() -> Double {
+        return sqrt(lengthSquared())
+    }
+
     /// Returns the dot product between this `Vector3` and the specified target `Vector3`.
     /// - Returns: The dot product result.
     public func dotProduct(with target:Vector3) -> Double {
@@ -266,6 +278,16 @@ public struct Vector3 : Equatable {
 
     /// Compound multiplication operator for two `Vector3`s.
     public static func *= (left:inout Vector3, right:Vector3) {
+        left = left * right
+    }
+
+    /// Scalar multiplication operator for a `Vector3` and a `Double`.
+    public static func * (left:Vector3, right:Double) -> Vector3 {
+        return Vector3(x:left.x * right, y:left.y * right, z:left.z * right)
+    }
+
+    /// Compound scalar multiplication operator for a `Vector3` and a `Double`.
+    public static func *= (left:inout Vector3, right:Double) {
         left = left * right
     }
 
