@@ -43,5 +43,7 @@ public class Cube : Object3D {
                      (7, 2, 4), (7, 3, 6)]
 
         strokeStyle = StrokeStyle(color:Color(.white))
+
+        renderMode = .verticies
     }
 }
