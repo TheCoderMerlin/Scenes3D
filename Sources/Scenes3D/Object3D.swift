@@ -31,6 +31,8 @@ public class Object3D : Transformable {
     public var fillStyle : FillStyle = FillStyle(color:Color(.black))
     public var strokeStyle : StrokeStyle = StrokeStyle(color:Color(.black))
 
+    public var renderMode : RenderMode = .default
+
     public init(transform:Transform3D) {
         inCameraView = false
         calculated2DVertices = []
@@ -60,23 +62,40 @@ public class Object3D : Transformable {
             return []
         }
 
-        var canvasObjectArray : [CanvasObject] = [fillStyle, strokeStyle]
+        switch renderMode {
+        case .default:
+            var canvasObjectArray : [CanvasObject] = [fillStyle, strokeStyle]
+            
+            for triangle in triangles {
+                if fillMode == .fill || fillMode == .fillAndStroke {
+                    let trianglePath = Path(fillMode:.fill)
+                    trianglePath.moveTo(calculated2DVertices[triangle.point1])
+                    trianglePath.lineTo(calculated2DVertices[triangle.point2])
+                    trianglePath.lineTo(calculated2DVertices[triangle.point3])
+                    trianglePath.close()
+                    
+                    canvasObjectArray.append(trianglePath)
+                }
+                
+                if fillMode == .stroke || fillMode == .fillAndStroke {
+                    
+                }
+            }
+            return canvasObjectArray
+        case .wireframe:
+            var canvasObjectArray : [CanvasObject] = [strokeStyle]
 
-        for triangle in triangles {
-            if fillMode == .fill || fillMode == .fillAndStroke {
-                let trianglePath = Path(fillMode:.fill)
-                trianglePath.moveTo(calculated2DVertices[triangle.point1])
-                trianglePath.lineTo(calculated2DVertices[triangle.point2])
-                trianglePath.lineTo(calculated2DVertices[triangle.point3])
-                trianglePath.close()
+            return canvasObjectArray
+        case .verticies:
+            var canvasObjectArray : [CanvasObject] = [strokeStyle]
 
-                canvasObjectArray.append(trianglePath)
+            for verticie in calculated2DVertices {
+                let rect = Rect(topLeft:verticie, size:Size(width:1, height:1))
+                let rectangle = Rectangle(rect:rect, fillMode:.stroke)
+                canvasObjectArray.append(rectangle)
             }
 
-            if fillMode == .stroke || fillMode == .fillAndStroke {
-
-            }
+            return canvasObjectArray
         }
-        return canvasObjectArray
     }
 }
