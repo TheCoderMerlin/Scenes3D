@@ -30,9 +30,10 @@ internal struct Plane {
         return normal.dotProduct(with:point) + constant
     }
 
-    func normalized() -> Plane {
+    mutating func normalized() -> Plane {
         let inverseNormalLength = 1 / normal.length()
         normal *= inverseNormalLength
         constant *= inverseNormalLength
+        return Plane(normal:normal, constant:constant)
     }
 }
