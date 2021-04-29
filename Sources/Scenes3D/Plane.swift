@@ -29,4 +29,10 @@ internal struct Plane {
     func distanceToPoint(_ point:Vector3) -> Double {
         return normal.dotProduct(with:point) + constant
     }
+
+    func normalized() -> Plane {
+        let inverseNormalLength = 1 / normal.length()
+        normal *= inverseNormalLength
+        constant *= inverseNormalLength
+    }
 }
